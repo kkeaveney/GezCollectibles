@@ -7,8 +7,9 @@ require('dotenv').config()
 const { create, globSource } = require('ipfs-http-client')
 const ipfs = create('http://127.0.0.1:5002')
 const fs = require('fs');
+var sleep = require('sleep');
 
-let nft, nftSimple, seed, link, keyhash, accounts
+let nft
 
 async function main() {
     // convenience check
@@ -55,11 +56,14 @@ async function main() {
             upload = await ipfs.add(globSource(`${__dirname}/metadata`, { recursive: true }))
 
             console.log('\nMinting NFTs...')
-            for(let i=1; i<files.length; i++){
+            for(let i=0; i<files.length; i++){
             await nft.mint(`https://ipfs.io/ipfs/${upload.cid.toString()}/${files[i]}`, web3.utils.toWei('0.001', 'Ether'))
-            // nftsData[i] = nftsData[i].slice(0, -2) + `,\n\t"price": ${await nft.price(i+1)},\n\t"uri": "${await nft.tokenURI(i+1)}"\n}` //add price&URI to nftsData
-            // console.log(`\n${i+1} NFT is minted with URI:\n${await nft.tokenURI(i+1)}`)
+
         }
+            for(let i=0;i<files.length; i++) {
+            nftsData[i] = nftsData[i].slice(0, -2) + `,\n\t"price": ${await nft.price(i+1)},\n\t"uri": "${await nft.tokenURI(i+1)}"\n}` //add price&URI to nftsData
+            console.log(`\n${i + 1} NFT is minted with URI:\n${await nft.tokenURI(i+1)}`)
+            }
 
             console.log('\nAggregating NFTs data...')
             if(fs.existsSync(`${__dirname}/nftsData.js`)) {
