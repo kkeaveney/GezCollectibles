@@ -18,14 +18,13 @@ class Main extends Component {
     if(this.props.dataLoaded) {
         return (
           <div className="Main">
-            <div className="container-fluid mt-5" style={{ color: "#55FF55", "backgroundColor": "#1D1D1D" }}>
-  
+            <div className="container-fluid mt-5" style={{ color: "#FFFFFF", "backgroundColor": "#000000" }}>
+
             <br></br>
             <div>
               <ReactTypingEffect
                 text={[
                   "Welcome to NFT Digital Art - X",
-                  "Presented by Dapp University 🎓",
                   "Look around and choose the NFT you like",
                   'Click "Buy" to get UNIQUE 💎 NFT',
                   "Hurry up before all NFTs are sold out!"
@@ -52,8 +51,8 @@ class Main extends Component {
               />
               </div>
               <br></br>&nbsp;
-              <img src={'https://i.gyazo.com/ed6df2ee521e82ae2498da1af3454c52.png'} style={{ width: '1000px', height: '300px' }} alt="adam"/>
-              <div className="row">
+              
+            <div className="row">
                 <main role="main" className="col-lg-12 d-flex text-center">
                   <div className="content mr-auto ml-auto">
                     <div className="row justify-content-around" style={{ width: '1000px', fontSize: '13px'}}>
@@ -67,7 +66,7 @@ class Main extends Component {
                             </a>
                           : <a href={nft.image} target="_blank" rel="noopener noreferrer">
                               <img
-                                src={`data:image/png;base64,${nft.img}`} style={{ border: '1mm ridge #55FF55', width: '200px', height: '300px' }} alt="art"
+                                src={`data:image/png;base64,${nft.img}`} style={{ border: '1mm ridge #8B8B8B', width: '200px', height: '300px' }} alt="art"
                               />
                             </a>
                         }
@@ -83,7 +82,7 @@ class Main extends Component {
                               <tr>
                                 <th className="text-left" style={{color: "#8B8B8B"}}>URI: </th>
                                 <td>
-                                  <a href={nft.uri} target="_blank" rel="noopener noreferrer" style={{color: "#55FF55"}}>
+                                  <a href={nft.uri} target="_blank" rel="noopener noreferrer" style={{color: "#FFFFFF"}}>
                                     link
                                   </a>
                                 </td>
@@ -92,18 +91,11 @@ class Main extends Component {
                               ? <tr>
                                   <th className="text-left" style={{color: "#8B8B8B"}}>Owner:</th>
                                   <th>
-                                    <img
-                                      alt="id"
-                                      className="ml-2 id border border-success"
-                                      width="15"
-                                      height="15"
-                                      src={`data:image/png;base64,${new Identicon(this.props.nftState[nft.id], 30).toString()}`}
-                                    />{' '}
                                     <a
                                       href={`https://etherscan.io/address/` + this.props.nftState[nft.id]}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      style={{color: "#55FF55", "fontWeight": "normal"}}
+                                      style={{color: "#FFFFFF", "fontWeight": "normal"}}
                                     >
                                       {this.props.nftState[nft.id].substring(0,8) + '...'}
                                     </a>
@@ -129,7 +121,7 @@ class Main extends Component {
                               : <button
                                   type="Success"
                                   className="btn btn-block btn-outline"
-                                  style={{border: '1px ridge #55FF55', color: "#55FF55", width: '200px'}}
+                                  style={{border: '1px ridge #FFFFFF', color: "#FFFFFF", width: '200px'}}
                                   onClick={(e) => buyNft(this.props.dispatch, nft.id, nft.price)}
                                 >
                                   <b>B u y</b>
@@ -153,7 +145,7 @@ class Main extends Component {
                     href={`https://${this.props.network}.etherscan.io/address/` + this.props.contract._address}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{color: "#55FF55"}}
+                    style={{color: "#FFFFFF"}}
                   >
                   {this.props.contract._address}
                   </a>
