@@ -1,5 +1,6 @@
 import { nftsData } from '../nftsData.js'
 import Contract from '../artifacts/contracts/NFT.sol/NFT.json'
+import adr from '../contracts/contract-address.json'
 import Web3 from 'web3'
 import {
   web3Loaded,
@@ -63,7 +64,7 @@ export const loadBalance = async (dispatch, web3, account) => {
 
 export const loadContract = async (dispatch, web3, netId) => {
   try {
-    const contract = new web3.eth.Contract(Contract.abi, '0xE2b56E77770b2594FE6739dd4F89B523005630dD')
+    const contract = new web3.eth.Contract(Contract.abi, adr.NFT)
     dispatch(contractLoaded(contract))
     return contract
   } catch (e) {
@@ -144,7 +145,7 @@ export const buyNft = async (dispatch, id, price) => {
     await contract.methods.buy(id).send({from: account, value: price})
       .on('receipt', async (r) => {
         update(dispatch)
-        window.alert(`Congratulations, you've received NFT with ID: ${id}\nAddress: ${'0xE2b56E77770b2594FE6739dd4F89B523005630dD'}`)
+        window.alert(`Congratulations, you've received NFT with ID: ${id}\nAddress: ${adr.NFT}`)
       })
       .on('error',(error) => {
         console.error(error)
@@ -153,5 +154,4 @@ export const buyNft = async (dispatch, id, price) => {
   } catch (e){
     console.log('Error, buy NFT', e)
   }
-  
 }
