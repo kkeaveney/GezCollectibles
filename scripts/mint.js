@@ -62,7 +62,7 @@ async function main() {
         }
             for(let i=0;i<files.length; i++) {
             nftsData[i] = nftsData[i].slice(0, -2) + `,\n\t"price": ${await nft.price(i+1)},\n\t"uri": "${await nft.tokenURI(i+1)}"\n}` //add price&URI to nftsData
-            console.log(`\n${i + 1} NFT is minted with URI:\n${await nft.tokenURI(i+1)}`)
+            console.log(`\n${i+1} NFT is minted with URI:\n${await nft.tokenURI(i+1)}`)
             }
 
             console.log('\nAggregating NFTs data...')
