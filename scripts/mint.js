@@ -50,15 +50,16 @@ async function main() {
             var img = fs.readFileSync(`${__dirname}/gallery/${files[i]}`, {encoding: 'base64'});
             nftsData.push(metadata.slice(0, -2) + `,\n\t"img": "${img}"` + `,\n\t"id": ${i+1}\n}`)
             await fs.writeFileSync(`${__dirname}/metadata/${/[^.]*/.exec(files[i])[0]}.json`, metadata)
+
         }
             console.log('\nUploading metadata on IPFS...')
             files = fs.readdirSync(`${__dirname}/metadata`);
             upload = await ipfs.add(globSource(`${__dirname}/metadata`, { recursive: true }))
+            console.log(`https://ipfs.io/ipfs/${upload.cid.toString()}/${files[0]}`)
 
             console.log('\nMinting NFTs...')
             for(let i=0; i<files.length; i++){
-            await nft.mint(`https://ipfs.io/ipfs/${upload.cid.toString()}/${files[i]}`, web3.utils.toWei('0.001', 'Ether'))
-
+            //await nft.mint(`https://ipfs.io/ipfs/${upload.cid.toString()}/${files[i]}`, web3.utils.toWei('0.001', 'Ether'))
         }
             for(let i=0;i<files.length; i++) {
             nftsData[i] = nftsData[i].slice(0, -2) + `,\n\t"price": ${await nft.price(i+1)},\n\t"uri": "${await nft.tokenURI(i+1)}"\n}` //add price&URI to nftsData
@@ -66,10 +67,10 @@ async function main() {
             }
 
             console.log('\nAggregating NFTs data...')
-            if(fs.existsSync(`${__dirname}/nftsData.js`)) {
-            await fs.unlinkSync(`${__dirname}/nftsData.js`)
+            if(fs.existsSync(`src/nftsData.js`)) {
+            await fs.unlinkSync(`src/nftsData.js`)
         }
-            await fs.writeFileSync(`${__dirname}/nftsData.js`, `export const nftsData = [${nftsData}]`)
+            await fs.writeFileSync(`src/nftsData.js`, `export const nftsData = [${nftsData}]`)
     }
 
 main()

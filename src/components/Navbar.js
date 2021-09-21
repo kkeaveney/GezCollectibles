@@ -13,7 +13,7 @@ import './Style.css';
 class Navbar extends Component {
   render() {
     return (
-      <nav className="navbar navbar-expand-lg rounded-bottom navBorderBottom" style={{ color: "#55FF55", "backgroundColor": "#1D1D1D" }}>
+      <nav className="navbar navbar-expand-lg rounded-bottom navBorderBottom" style={{ color: "#FFFFFF", "backgroundColor": "#000000"}}>
         {/* <a
           className="navbar-brand rounded"
           target="_blank"
@@ -36,14 +36,14 @@ class Navbar extends Component {
                     <div className="rounded balance">
                       <li className="nav-item nav-link small">
                         <b>{this.props.balance}</b>
-                        <img src={eth} width='18' height='18' alt="eth" />
+                        {/* <img src={eth} width='18' height='18' alt="eth" /> */}
                       </li>
                     </div>
                     <div className="rounded account">
                       <li className="nav-item nav-link small">
                         { this.props.network === 'Main' || this.props.network === 'Private' || this.props.network === 'Wrong network'
                         ? <b><a
-                            style={{ color: "#55FF55" }}
+                            style={{ color: "#00000" }}
                             href={`https://etherscan.io/address/` + this.props.account}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -52,7 +52,7 @@ class Navbar extends Component {
                           &nbsp;
                           </a></b>
                         : <b><a
-                            style={{color: "#55FF55"}}
+                            style={{color: "#000000"}}
                             href={`https://${this.props.network}.etherscan.io/address/` + this.props.account}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -60,13 +60,13 @@ class Navbar extends Component {
                           {this.props.account.substring(0,6) + '...' + this.props.account.substring(38,42)}
                           </a></b>
                         }
-                        <img
+                        {/* <img
                           alt="id"
                           className="id border border-success"
                           width="20"
                           height="20"
                           src={`data:image/png;base64,${new Identicon(this.props.account, 30).toString()}`}
-                        />
+                        /> */}
                       </li>
                     </div>
                   </div>
@@ -79,7 +79,7 @@ class Navbar extends Component {
                 ? <button
                     type="Success"
                     className="btn btn-outline btn-block "
-                    style={{ backgroundColor: "#55FF55", color: "#000000" }}
+                    style={{ backgroundColor: "#FFFFFF", color: "#000000" }}
                     onClick={async () => {
                       try {
                         await window.ethereum.enable()
