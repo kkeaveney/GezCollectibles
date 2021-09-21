@@ -100,7 +100,6 @@ export const loadNftData = async (dispatch, contract) => {
   try{
     const totalSupply = await contract.methods.totalSupply().call()
     const uri = await contract.methods.tokenURI(1).call()
-
     fetch(uri)
       .then(res => res.json())
       .then(result => {
@@ -108,8 +107,9 @@ export const loadNftData = async (dispatch, contract) => {
           dispatch(metadataLoaded(nftsData))
         }
       });
-      console.log(nftsData)
+      
   } catch (e) {
+    console.log(nftsData)
     console.log('Error, load images', e)
   }
 }

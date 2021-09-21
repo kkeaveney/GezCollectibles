@@ -26,7 +26,7 @@ class App extends Component {
 
   render() {
     return (
-      <div className="text-monospace text-center bgDark7">
+      <div className="text-Arial text-center bgDark7">
         <Navbar />
         <Main />
       </div>
