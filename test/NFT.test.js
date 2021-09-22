@@ -1,13 +1,19 @@
 const { expect } = require('chai')
-const { ethers } = require('hardhat')
+const { ethers, web3 } = require('hardhat')
+const { parseEther } = require("ethers/lib/utils");
 
 describe('NFT', function () {
-    let NFT, nft, owner, addr1, addr2
+    let NFT, nft, owner, addr1, addr2, totalSupply, balance
 
     beforeEach(async () =>{
         NFT = await ethers.getContractFactory('NFT');
         nft = await NFT.deploy();
         [owner, addr1, addr2, _] = await ethers.getSigners();
+        totalSupply = 20;
+        // Mint 20 NFTs
+        for(i=1;i<=totalSupply;i++){
+            await nft.mint('www.ipfs.co.uk', parseEther('0.9'))
+        }
     })
 
     describe('Deployment', async () => {
@@ -17,18 +23,27 @@ describe('NFT', function () {
     })
 
     describe('Minting', async () => {
-        it('should mint NFTs', async () => {
-            nft.mint('www.www', '1')
-            expect(await nft.ownerOf(1)).to.equal(nft.address)
-            expect(await nft.totalSupply()).to.equal(1) // contract is the NFT owner
-            expect(await nft.balanceOf(nft.address)).to.equal(1)
+        it('should mint NFT collection', async () => {
+           expect(await nft.totalSupply()).to.eq(20)
         })
     })
-    describe('Transfer NFT ownership', async () => {
-        it('should transfer NFT ownership to the contract', async () => {
-            await nft.mint('www.www', '1')
-        })
-    })
+    describe('Trade NFT', async () => {
+        it('should transfer NFT ownership to purchaser', async () => {
+            let price = '1' // 1 ether
+            addr1balance = await web3.eth.getBalance(addr1.address);
+            await nft.connect(addr1).buy(1, { value: parseEther(price)})
 
+            // Check NFT balances
+            expect(await nft.balanceOf(addr1.address)).to.eq(price)
+            expect(await nft.balanceOf(nft.address)).to.eq(totalSupply - price)
+
+            // // Check contract ETH balance
+            balance = await web3.eth.getBalance(addr1.address);
+            console.log(parseEther(price).toString())
+            console.log(BigInt(addr1balance) - BigInt(price))
+            //expect(BigInt(balance)).to.be.lt(BigInt(addr1balance) - BigInt(price))
+
+        })
+    })
 })
 

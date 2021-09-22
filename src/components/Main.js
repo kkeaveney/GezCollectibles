@@ -26,7 +26,7 @@ class Main extends Component {
                 text={[
                   "Welcome to NFT Digital Art - X",
                   "Look around and choose the NFT you like",
-                  'Click "Buy" to get UNIQUE 💎 NFT',
+                  'Click "Buy" to get UNIQUE NFT',
                   "Hurry up before all NFTs are sold out!"
                 ]}
                 speed='40'
@@ -150,7 +150,7 @@ class Main extends Component {
               </div>
             </div>
             <br></br>
-            <footer>
+            {/* <footer>
             {this.props.contract
               ? <div style={{color: "#8B8B8B", fontSize: "14px"}}>
                   NFT deployed at:&nbsp;
@@ -165,7 +165,7 @@ class Main extends Component {
                 </div>
               : <div> Wrong network </div>
             }
-            </footer>
+            </footer> */}
           </div>
         )
       } else {

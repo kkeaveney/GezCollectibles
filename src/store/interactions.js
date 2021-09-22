@@ -84,7 +84,7 @@ export const update = async (dispatch) => {
     account = await loadAccount(dispatch, web3)
     netId = await web3.eth.net.getId()
     contract = await loadContract(dispatch, web3, netId)
-  
+
     await loadNftData(dispatch, contract)
     await loadNftState(dispatch, contract)
     if(account && contract){
@@ -107,7 +107,7 @@ export const loadNftData = async (dispatch, contract) => {
           dispatch(metadataLoaded(nftsData))
         }
       });
-      
+
   } catch (e) {
     console.log(nftsData)
     console.log('Error, load images', e)
