@@ -27,6 +27,15 @@ describe('NFT', function () {
            expect(await nft.totalSupply()).to.eq(20)
         })
     })
+
+    describe('Trade NFT with non-minted NFT', async () => {
+        it('should revert with non-exsistent id', async () => {
+            let price = '1' // 1 ether
+            let id = 21;
+            await expect(
+                nft.connect(addr1).buy(id)).to.be.revertedWith("Error, wrong Token id")
+        })
+    })
     describe('Trade NFT', async () => {
         it('should transfer NFT ownership to purchaser', async () => {
             let price = '1' // 1 ether
@@ -46,8 +55,6 @@ describe('NFT', function () {
             // Check NFT balances
             expect(await nft.balanceOf(addr1.address)).to.eq(price)
             expect(await nft.balanceOf(nft.address)).to.eq(totalSupply - price)
-
-
         })
     })
 })
