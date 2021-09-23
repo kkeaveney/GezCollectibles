@@ -27,22 +27,34 @@ describe('NFT', function () {
            expect(await nft.totalSupply()).to.eq(20)
         })
     })
+
+    describe('Trade NFT with non-minted NFT', async () => {
+        it('should revert with non-exsistent id', async () => {
+            let price = '1' // 1 ether
+            let id = 21;
+            await expect(
+                nft.connect(addr1).buy(id)).to.be.revertedWith("Error, wrong Token id")
+        })
+    })
     describe('Trade NFT', async () => {
         it('should transfer NFT ownership to purchaser', async () => {
             let price = '1' // 1 ether
+            let id = 1;
+            let tokenURI  = await nft.tokenURI(id)
+
             addr1balance = await web3.eth.getBalance(addr1.address);
-            await nft.connect(addr1).buy(1, { value: parseEther(price)})
+            let tx = await nft.connect(addr1).buy(id, { value: parseEther(price)})
+            let receipt = await tx.wait()
+            //console.log(receipt)
+            let event = receipt.events[2].args
+            expect(event[0]).to.eq(addr1.address)
+            expect(event[1]).to.eq(parseEther('0.9'))
+            expect(event[2]).to.eq(1)
+            expect(event[3]).to.eq(tokenURI)
 
             // Check NFT balances
             expect(await nft.balanceOf(addr1.address)).to.eq(price)
             expect(await nft.balanceOf(nft.address)).to.eq(totalSupply - price)
-
-            // // Check contract ETH balance
-            balance = await web3.eth.getBalance(addr1.address);
-            console.log(parseEther(price).toString())
-            console.log(BigInt(addr1balance) - BigInt(price))
-            //expect(BigInt(balance)).to.be.lt(BigInt(addr1balance) - BigInt(price))
-
         })
     })
 })
