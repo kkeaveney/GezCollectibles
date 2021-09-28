@@ -17,6 +17,7 @@ describe('NFT', function () {
 
         [owner, addr1, addr2, _] = await ethers.getSigners();
         await nft.flipSaleIsActive() // Activate Sale
+        await nft.setBaseURI('www.one.com')
     })
 
     describe('Ownership', async () => {
@@ -47,25 +48,21 @@ describe('NFT', function () {
     })
     describe('Trade NFT', async () => {
         it('should transfer NFT ownership to purchaser, emit purchase event', async () => {
-            await nft.mint(10, {value: parseEther('1')})
-            //let price = '1' // 1 ether
-            let id = 1;
-            let tokenURI  = await nft.tokenURI(id)
+            let amount = 10
+            let tx = await nft.connect(addr1).mint(amount, {value: parseEther('1')})
 
             addr1balance = await web3.eth.getBalance(addr1.address);
-            let tx = await nft.connect(addr1).buy(id, { value: parseEther('0.1')})
             let receipt = await tx.wait()
-            let event = receipt.events[2].args
-            expect(event[0]).to.eq(addr1.address)
-            expect(event[1]).to.eq(parseEther('0.1'))
+            let event = receipt.events[0].args
+            expect(event[1]).to.eq(addr1.address)
             expect(event[2]).to.eq(1)
-            expect(event[3]).to.eq(tokenURI)
-            console.log('token',tokenURI)
             // Check NFT balances
-            expect(await nft.balanceOf(addr1.address)).to.eq(1)
-            let balance = await nft.totalSupply()
-            console.log(balance.toString())
-            // expect(await nft.balanceOf(nft.address)).to.eq(totalSupply - price)
+            expect(await nft.balanceOf(addr1.address)).to.eq(10)
+            expect(await nft.mintCount()).to.eq(10)
+            expect(await nft.balanceOf(nft.address)).to.eq(0)
+            // Remaining unminted tokens
+            let mintedCount = await nft.mintCount()
+            expect(maxNftSupply - mintedCount).to.eq(11101)
         })
     })
 })

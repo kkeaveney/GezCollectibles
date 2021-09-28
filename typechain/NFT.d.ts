@@ -34,6 +34,7 @@ interface NFTInterface extends ethers.utils.Interface {
     "getApproved(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "mint(uint256)": FunctionFragment;
+    "mintCount()": FunctionFragment;
     "mintPrice()": FunctionFragment;
     "name()": FunctionFragment;
     "nftPrice()": FunctionFragment;
@@ -43,6 +44,7 @@ interface NFTInterface extends ethers.utils.Interface {
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "saleIsActive()": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
+    "setBaseURI(string)": FunctionFragment;
     "setRevealTimestamp(uint256)": FunctionFragment;
     "setTotalSupply(uint256)": FunctionFragment;
     "sold(uint256)": FunctionFragment;
@@ -86,6 +88,7 @@ interface NFTInterface extends ethers.utils.Interface {
     values: [string, string]
   ): string;
   encodeFunctionData(functionFragment: "mint", values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: "mintCount", values?: undefined): string;
   encodeFunctionData(functionFragment: "mintPrice", values?: undefined): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "nftPrice", values?: undefined): string;
@@ -110,6 +113,7 @@ interface NFTInterface extends ethers.utils.Interface {
     functionFragment: "setApprovalForAll",
     values: [string, boolean]
   ): string;
+  encodeFunctionData(functionFragment: "setBaseURI", values: [string]): string;
   encodeFunctionData(
     functionFragment: "setRevealTimestamp",
     values: [BigNumberish]
@@ -176,6 +180,7 @@ interface NFTInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "mintCount", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mintPrice", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "nftPrice", data: BytesLike): Result;
@@ -197,6 +202,7 @@ interface NFTInterface extends ethers.utils.Interface {
     functionFragment: "setApprovalForAll",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setBaseURI", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setRevealTimestamp",
     data: BytesLike
@@ -381,6 +387,10 @@ export class NFT extends Contract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    mintCount(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    "mintCount()"(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     mintPrice(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     "mintPrice()"(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -443,6 +453,16 @@ export class NFT extends Contract {
     "setApprovalForAll(address,bool)"(
       operator: string,
       approved: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setBaseURI(
+      baseURI_: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "setBaseURI(string)"(
+      baseURI_: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -637,6 +657,10 @@ export class NFT extends Contract {
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  mintCount(overrides?: CallOverrides): Promise<BigNumber>;
+
+  "mintCount()"(overrides?: CallOverrides): Promise<BigNumber>;
+
   mintPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
   "mintPrice()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -696,6 +720,16 @@ export class NFT extends Contract {
   "setApprovalForAll(address,bool)"(
     operator: string,
     approved: boolean,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setBaseURI(
+    baseURI_: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "setBaseURI(string)"(
+    baseURI_: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -874,6 +908,10 @@ export class NFT extends Contract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
+    mintCount(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "mintCount()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     mintPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
     "mintPrice()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -929,6 +967,13 @@ export class NFT extends Contract {
     "setApprovalForAll(address,bool)"(
       operator: string,
       approved: boolean,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setBaseURI(baseURI_: string, overrides?: CallOverrides): Promise<void>;
+
+    "setBaseURI(string)"(
+      baseURI_: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1168,6 +1213,10 @@ export class NFT extends Contract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    mintCount(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "mintCount()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     mintPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
     "mintPrice()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1230,6 +1279,16 @@ export class NFT extends Contract {
     "setApprovalForAll(address,bool)"(
       operator: string,
       approved: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setBaseURI(
+      baseURI_: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "setBaseURI(string)"(
+      baseURI_: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1430,6 +1489,10 @@ export class NFT extends Contract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    mintCount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "mintCount()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     mintPrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "mintPrice()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -1492,6 +1555,16 @@ export class NFT extends Contract {
     "setApprovalForAll(address,bool)"(
       operator: string,
       approved: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setBaseURI(
+      baseURI_: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "setBaseURI(string)"(
+      baseURI_: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

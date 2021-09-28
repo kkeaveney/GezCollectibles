@@ -16,7 +16,6 @@ contract NFT is ERC721, Ownable {
   uint public nftPrice = 80000000000000000; //0.08 ETH
 
   uint public MAX_PURCHASE;
-
   uint public MAX_NFTS;
 
   bool public saleIsActive = false;
@@ -27,13 +26,14 @@ contract NFT is ERC721, Ownable {
   mapping (uint => bool) public sold;
 
   uint public mintPrice;
+  Counters.Counter private _tokenIdCounter;
 
 
   event Purchase(address owner, uint price, uint id, string uri);
 
-  constructor(uint _mintPrice, string memory _name, string memory _symbol, uint256 _totalSupply, uint256 _maxPurchase) ERC721(_name, _symbol) public {
+  constructor(uint _mintPrice, string memory _name, string memory _symbol, uint256 _maxNFTs, uint256 _maxPurchase) ERC721(_name, _symbol) public {
     mintPrice = _mintPrice;
-    MAX_NFTS = _totalSupply;
+    MAX_NFTS = _maxNFTs;
     MAX_PURCHASE = _maxPurchase;
     _owner = msg.sender;
   }
@@ -42,10 +42,18 @@ contract NFT is ERC721, Ownable {
     require(saleIsActive, "Sale must be active for minting");
     require(_count <= MAX_PURCHASE, 'Can only mint 10 NFTs at a time');
     require(msg.value == mintPrice * _count, "Insuffcient Amount Sent");
-    uint _tokenId = totalSupply() + 1;
 
-    _mint(address(this), _tokenId);
-    return true;
+    require(_tokenIdCounter.current() <= MAX_NFTS, "At max supply");
+
+    for(uint i=1; i<=_count; i++) {
+      uint256 _tokenID = _tokenIdCounter.current();
+      _safeMint(msg.sender, _tokenID + 1);
+      _tokenIdCounter.increment();
+    }
+  }
+
+  function setBaseURI(string memory baseURI_) public onlyOwner {
+    _setBaseURI(baseURI_);
   }
 
   function setTotalSupply(uint _totalSupply) public onlyOwner {
@@ -58,6 +66,10 @@ contract NFT is ERC721, Ownable {
 
   function flipSaleIsActive() public onlyOwner {
     saleIsActive = !saleIsActive;
+  }
+
+  function mintCount() public view onlyOwner returns (uint){
+    return _tokenIdCounter.current();
   }
 
   function buy(uint _id) external payable {
