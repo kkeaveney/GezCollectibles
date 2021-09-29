@@ -52,12 +52,15 @@ contract NFT is ERC721, Ownable {
     }
   }
 
-  function setBaseURI(string memory baseURI_) public onlyOwner {
-    _setBaseURI(baseURI_);
+  function reserveNFTs() public onlyOwner() {
+    uint i = totalSupply();
+    for(i = 0; i <20; i++) {
+      _safeMint(msg.sender, i+1);
+    }
   }
 
-  function setTotalSupply(uint _totalSupply) public onlyOwner {
-    MAX_NFTS = _totalSupply;
+  function setBaseURI(string memory baseURI_) public onlyOwner {
+    _setBaseURI(baseURI_);
   }
 
   function setRevealTimestamp(uint256 _revealTimeStamp) public onlyOwner {
@@ -66,10 +69,6 @@ contract NFT is ERC721, Ownable {
 
   function flipSaleIsActive() public onlyOwner {
     saleIsActive = !saleIsActive;
-  }
-
-  function mintCount() public view onlyOwner returns (uint){
-    return _tokenIdCounter.current();
   }
 
   function buy(uint _id) external payable {
