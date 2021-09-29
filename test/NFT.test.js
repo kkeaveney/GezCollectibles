@@ -17,7 +17,7 @@ describe('NFT', function () {
 
         [owner, addr1, addr2, _] = await ethers.getSigners();
         await nft.flipSaleIsActive() // Activate Sale
-        await nft.setBaseURI('www.one.com')
+        await nft.setBaseURI('www.batz.com')
     })
 
     describe('Ownership', async () => {
@@ -46,6 +46,18 @@ describe('NFT', function () {
                 nft.connect(addr1).buy(id)).to.be.revertedWith("Error, wrong Token id")
         })
     })
+
+    describe('Mint reserve allocation', async () => {
+        it('should revert with non-contract owner', async () => {
+            await(expect(nft.connect(addr1).reserveNFTs()).to.be.revertedWith("Ownable: caller is not the owner"))
+        })
+
+        it('should allocate allocation to contract owner', async () => {
+            await nft.reserveNFTs()
+            expect(await nft.balanceOf(owner.address)).to.eq(20)
+        })
+
+    })
     describe('Trade NFT', async () => {
         it('should transfer NFT ownership to purchaser, emit purchase event', async () => {
             let amount = 10
@@ -57,12 +69,14 @@ describe('NFT', function () {
             expect(event[1]).to.eq(addr1.address)
             expect(event[2]).to.eq(1)
             // Check NFT balances
+            let totalSupply = await nft.totalSupply()
             expect(await nft.balanceOf(addr1.address)).to.eq(10)
-            expect(await nft.mintCount()).to.eq(10)
+            expect(totalSupply).to.eq(10)
             expect(await nft.balanceOf(nft.address)).to.eq(0)
             // Remaining unminted tokens
-            let mintedCount = await nft.mintCount()
-            expect(maxNftSupply - mintedCount).to.eq(11101)
+            expect(maxNftSupply - totalSupply ).to.eq(11101)
+            expect(await nft.tokenOfOwnerByIndex(addr1.address,0)).to.eq(1)
+            expect(await nft.tokenByIndex(0)).to.eq(1)
         })
     })
 })
