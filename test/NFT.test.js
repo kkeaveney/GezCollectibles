@@ -6,14 +6,14 @@ describe('NFT', function () {
     let NFT, nft, owner, addr1, addr2, totalSupply
     const maxNftSupply = 11111;
     const maxPurchase = 10;
-    const price = parseEther('0.1')
+    const price = parseEther('0.8')
 
     beforeEach(async () =>{
         const currentBlock = ethers.BigNumber.from(
         await ethers.provider.getBlockNumber())
 
         NFT = await ethers.getContractFactory('NFT');
-        nft = await NFT.deploy(price, 'MADDOGZ', 'MDZ', maxNftSupply, maxPurchase);
+        nft = await NFT.deploy('MADDOGZ', 'MDZ', maxNftSupply, maxPurchase);
 
         [owner, addr1, addr2, _] = await ethers.getSigners();
         await nft.flipSaleIsActive() // Activate Sale
@@ -49,11 +49,11 @@ describe('NFT', function () {
 
     describe('Mint reserve allocation', async () => {
         it('should revert with non-contract owner', async () => {
-            await(expect(nft.connect(addr1).reserveNFTs()).to.be.revertedWith("Ownable: caller is not the owner"))
+            await(expect(nft.connect(addr1).reserveTokens()).to.be.revertedWith("Ownable: caller is not the owner"))
         })
 
         it('should allocate allocation to contract owner', async () => {
-            await nft.reserveNFTs()
+            await nft.reserveTokens()
             expect(await nft.balanceOf(owner.address)).to.eq(20)
         })
 
@@ -61,7 +61,7 @@ describe('NFT', function () {
     describe('Trade NFT', async () => {
         it('should transfer NFT ownership to purchaser, emit purchase event', async () => {
             let amount = 10
-            let tx = await nft.connect(addr1).mint(amount, {value: parseEther('1')})
+            let tx = await nft.connect(addr1).mint(amount, {value: price})
 
             addr1balance = await web3.eth.getBalance(addr1.address);
             let receipt = await tx.wait()
