@@ -3,13 +3,13 @@ const { ethers, web3 } = require('hardhat')
 const { parseEther } = require("ethers/lib/utils");
 
 describe('NFT', function () {
-    let NFT, nft, owner, addr1, addr2, totalSupply
+    let NFT, nft, owner, addr1, addr2, currentBlock
     const maxNftSupply = 11111;
     const maxPurchase = 10;
     const price = parseEther('0.8')
 
     beforeEach(async () =>{
-        const currentBlock = ethers.BigNumber.from(
+        currentBlock = ethers.BigNumber.from(
         await ethers.provider.getBlockNumber())
 
         NFT = await ethers.getContractFactory('NFT');
@@ -60,9 +60,10 @@ describe('NFT', function () {
     })
     describe('Trade NFT', async () => {
         it('should transfer NFT ownership to purchaser, emit purchase event', async () => {
+            console.log(currentBlock.toString())
             let amount = 10
             let tx = await nft.connect(addr1).mint(amount, {value: price})
-
+            console.log(currentBlock.toString())
             addr1balance = await web3.eth.getBalance(addr1.address);
             let receipt = await tx.wait()
             let event = receipt.events[0].args
@@ -77,6 +78,9 @@ describe('NFT', function () {
             expect(maxNftSupply - totalSupply ).to.eq(11101)
             expect(await nft.tokenOfOwnerByIndex(addr1.address,0)).to.eq(1)
             expect(await nft.tokenByIndex(0)).to.eq(1)
+            let num = await nft.getTokenDetail(1)
+            console.log(currentBlock.toString())
+            
         })
     })
 })

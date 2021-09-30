@@ -154,8 +154,6 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
       return _nftDetail[tokenId];
     }
 
-    //function getAlienDetail(uint256 tokenId) public view returns(AlienDetail memory detail) {
-
     function buy(uint id) external payable {
       _validate(id); //check req. for trade
       _trade(id); //swap nft for eth
