@@ -28,6 +28,9 @@ import "hardhat/console.sol";
     // Maximum number of tokens to supply
     uint public MAX_NFTS = 11111;
 
+    // Random Golden NFT
+    uint256 goldNFT = 0;
+
     // Current price
     uint256 public CURRENT_PRICE = 80000000000000000; //0.08 ETH
 
@@ -104,6 +107,31 @@ import "hardhat/console.sol";
           _nftDetail[_tokenId] = NFTDetail(first_encounter);
           emit TokenMinted(_tokenId, msg.sender, first_encounter);
         }
+    }
+
+    /**
+    select Gold NFT
+     */
+    function selectGoldNFT() public onlyOwner {
+      require (goldNFT == 0, "Gold NFT already minted");
+
+      uint256 max = MAX_NFTS - 1;
+      uint256 sell = totalSupply() - 1;
+      uint256 randomHash = uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty)));
+
+      randomHash = randomHash % max;
+      if(randomHash >= 5 && randomHash <= sell) {
+        goldNFT = randomHash;
+      }
+    }
+    /**
+    return Gold NFT
+    */
+    function getGoldNFT() public returns (uint256){
+      if(msg.sender != owner()) {
+        require(STARTING_INDEX > 0 && totalSupply() == MAX_NFTS);
+      }
+      return goldNFT;
     }
     /**
     set starting index

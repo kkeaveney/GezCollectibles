@@ -31,6 +31,7 @@ interface NFTInterface extends ethers.utils.Interface {
     "buy(uint256)": FunctionFragment;
     "flipSaleIsActive()": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
+    "getGoldNFT()": FunctionFragment;
     "getTokenDetail(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "mint(uint256)": FunctionFragment;
@@ -42,6 +43,7 @@ interface NFTInterface extends ethers.utils.Interface {
     "reserveTokens()": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "saleIsActive()": FunctionFragment;
+    "selectGoldNFT()": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
     "setBaseURI(string)": FunctionFragment;
     "setCurrentPrice(uint256)": FunctionFragment;
@@ -84,6 +86,10 @@ interface NFTInterface extends ethers.utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "getGoldNFT",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "getTokenDetail",
     values: [BigNumberish]
   ): string;
@@ -116,6 +122,10 @@ interface NFTInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "saleIsActive",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "selectGoldNFT",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -188,6 +198,7 @@ interface NFTInterface extends ethers.utils.Interface {
     functionFragment: "getApproved",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "getGoldNFT", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getTokenDetail",
     data: BytesLike
@@ -215,6 +226,10 @@ interface NFTInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "saleIsActive",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "selectGoldNFT",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -387,6 +402,14 @@ export class NFT extends Contract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
+    getGoldNFT(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "getGoldNFT()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     getTokenDetail(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -489,6 +512,14 @@ export class NFT extends Contract {
     saleIsActive(overrides?: CallOverrides): Promise<[boolean]>;
 
     "saleIsActive()"(overrides?: CallOverrides): Promise<[boolean]>;
+
+    selectGoldNFT(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "selectGoldNFT()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     setApprovalForAll(
       operator: string,
@@ -695,6 +726,14 @@ export class NFT extends Contract {
     overrides?: CallOverrides
   ): Promise<string>;
 
+  getGoldNFT(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "getGoldNFT()"(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   getTokenDetail(
     tokenId: BigNumberish,
     overrides?: CallOverrides
@@ -786,6 +825,14 @@ export class NFT extends Contract {
   saleIsActive(overrides?: CallOverrides): Promise<boolean>;
 
   "saleIsActive()"(overrides?: CallOverrides): Promise<boolean>;
+
+  selectGoldNFT(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "selectGoldNFT()"(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   setApprovalForAll(
     operator: string,
@@ -979,6 +1026,10 @@ export class NFT extends Contract {
       overrides?: CallOverrides
     ): Promise<string>;
 
+    getGoldNFT(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "getGoldNFT()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     getTokenDetail(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -1056,6 +1107,10 @@ export class NFT extends Contract {
     saleIsActive(overrides?: CallOverrides): Promise<boolean>;
 
     "saleIsActive()"(overrides?: CallOverrides): Promise<boolean>;
+
+    selectGoldNFT(overrides?: CallOverrides): Promise<void>;
+
+    "selectGoldNFT()"(overrides?: CallOverrides): Promise<void>;
 
     setApprovalForAll(
       operator: string,
@@ -1309,6 +1364,14 @@ export class NFT extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getGoldNFT(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "getGoldNFT()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     getTokenDetail(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -1403,6 +1466,14 @@ export class NFT extends Contract {
     saleIsActive(overrides?: CallOverrides): Promise<BigNumber>;
 
     "saleIsActive()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    selectGoldNFT(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "selectGoldNFT()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     setApprovalForAll(
       operator: string,
@@ -1613,6 +1684,14 @@ export class NFT extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getGoldNFT(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "getGoldNFT()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     getTokenDetail(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -1707,6 +1786,14 @@ export class NFT extends Contract {
     saleIsActive(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "saleIsActive()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    selectGoldNFT(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "selectGoldNFT()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     setApprovalForAll(
       operator: string,
