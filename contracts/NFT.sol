@@ -129,9 +129,10 @@ import "hardhat/console.sol";
     */
     function getGoldNFT() public returns (uint256){
       if(msg.sender != owner()) {
-        require(STARTING_INDEX > 0 && totalSupply() == MAX_NFTS);
+        require(STARTING_INDEX != 0, 'Sale not started');
+        require (totalSupply() == MAX_NFTS, 'All NFTs must be minted');
       }
-      return goldNFT;
+        return goldNFT;
     }
     /**
     set starting index
