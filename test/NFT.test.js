@@ -79,5 +79,13 @@ describe('NFT', function () {
             let num = await nft.getTokenDetail(1)
         })
     })
+
+    describe('Minting the Gold NFT', async () => {
+        it('should not reveal until all tokens are minted', async () => {
+            let amount = 10
+            let tx = await nft.connect(addr1).mint(amount, {value: price})
+            await(expect(nft.connect(addr1).getGoldNFT()).to.be.revertedWith('All NFTs must be minted'))
+        })
+    })
 })
 
