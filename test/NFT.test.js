@@ -60,10 +60,8 @@ describe('NFT', function () {
     })
     describe('Trade NFT', async () => {
         it('should transfer NFT ownership to purchaser, emit purchase event', async () => {
-            console.log(currentBlock.toString())
             let amount = 10
             let tx = await nft.connect(addr1).mint(amount, {value: price})
-            console.log(currentBlock.toString())
             addr1balance = await web3.eth.getBalance(addr1.address);
             let receipt = await tx.wait()
             let event = receipt.events[0].args
@@ -79,8 +77,6 @@ describe('NFT', function () {
             expect(await nft.tokenOfOwnerByIndex(addr1.address,0)).to.eq(1)
             expect(await nft.tokenByIndex(0)).to.eq(1)
             let num = await nft.getTokenDetail(1)
-            console.log(currentBlock.toString())
-            
         })
     })
 })
