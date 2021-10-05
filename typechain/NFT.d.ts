@@ -402,13 +402,9 @@ export class NFT extends Contract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
-    getGoldNFT(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+    getGoldNFT(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    "getGoldNFT()"(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+    "getGoldNFT()"(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getTokenDetail(
       tokenId: BigNumberish,
@@ -726,13 +722,9 @@ export class NFT extends Contract {
     overrides?: CallOverrides
   ): Promise<string>;
 
-  getGoldNFT(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+  getGoldNFT(overrides?: CallOverrides): Promise<BigNumber>;
 
-  "getGoldNFT()"(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+  "getGoldNFT()"(overrides?: CallOverrides): Promise<BigNumber>;
 
   getTokenDetail(
     tokenId: BigNumberish,
@@ -1364,13 +1356,9 @@ export class NFT extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getGoldNFT(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
+    getGoldNFT(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "getGoldNFT()"(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
+    "getGoldNFT()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     getTokenDetail(
       tokenId: BigNumberish,
@@ -1684,13 +1672,9 @@ export class NFT extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getGoldNFT(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
+    getGoldNFT(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    "getGoldNFT()"(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
+    "getGoldNFT()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getTokenDetail(
       tokenId: BigNumberish,
