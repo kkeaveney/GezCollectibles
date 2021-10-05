@@ -118,7 +118,6 @@ import "hardhat/console.sol";
       uint256 max = MAX_NFTS - 1;
       uint256 sell = totalSupply() - 1;
       uint256 randomHash = uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty)));
-
       randomHash = randomHash % max;
       if(randomHash >= 5 && randomHash <= sell) {
         goldNFT = randomHash;
@@ -127,7 +126,7 @@ import "hardhat/console.sol";
     /**
     return Gold NFT
     */
-    function getGoldNFT() public returns (uint256){
+    function getGoldNFT() public view returns (uint256){
       if(msg.sender != owner()) {
         require(STARTING_INDEX != 0, 'Sale not started');
         require (totalSupply() == MAX_NFTS, 'All NFTs must be minted');

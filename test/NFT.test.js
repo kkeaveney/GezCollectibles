@@ -13,7 +13,7 @@ describe('NFT', function () {
         await ethers.provider.getBlockNumber())
 
         NFT = await ethers.getContractFactory('NFT');
-        nft = await NFT.deploy('MADDOGZ', 'MDZ', maxNftSupply, maxPurchase);
+        nft = await NFT.deploy('MADDOGZ', 'MDZ', 'www.xx.com', 0);
 
         [owner, addr1, addr2, _] = await ethers.getSigners();
         await nft.flipSaleIsActive() // Activate Sale
@@ -81,11 +81,32 @@ describe('NFT', function () {
     })
 
     describe('Minting the Gold NFT', async () => {
-        it('should not reveal until all tokens are minted', async () => {
+        it('should not reveal until sale has started', async () => {
             let amount = 10
+            let tx = await nft.connect(addr1).mint(amount, {value: price})
+            await(expect(nft.connect(addr1).getGoldNFT()).to.be.revertedWith('Sale not started'))
+        })
+
+        it('should not reveal until all tokens are minted', async () => {
+            // Set Starting Index
+            let amount = 10
+            await nft.setStartingIndex(1)
             let tx = await nft.connect(addr1).mint(amount, {value: price})
             await(expect(nft.connect(addr1).getGoldNFT()).to.be.revertedWith('All NFTs must be minted'))
         })
+        // Comment out once tested, too time intensive to mint all NFTs.
+        it('return the Gold NFT', async () => {
+            let totalSupply =  11111; // limited supply for testing only
+            for(let i = 1; i <= totalSupply; i++) {
+                 await nft.mintToken(i)
+            }
+            let golfNFT = await nft.getGoldNFT()  // Gold NFT hasn't been allocated yet
+            expect(golfNFT).to.eq(0)
+
+            let tx = await nft.selectGoldNFT()
+            await tx.wait()
+            golfNFT = await nft.getGoldNFT()
+            expect(golfNFT).to.not.eq(0)
+        })
     })
 })
-
