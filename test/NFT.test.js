@@ -3,10 +3,15 @@ const { ethers, web3 } = require('hardhat')
 const { parseEther } = require("ethers/lib/utils");
 
 describe('NFT', function () {
-    let NFT, nft, owner, addr1, addr2, totalSupply
+    let NFT, nft, owner, addr1, addr2, addr3, addr4
     const maxNftSupply = 11111;
     const maxPurchase = 10;
     const price = parseEther('0.1')
+
+    let t1 = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
+    let t2 = '0x70997970C51812dc3A010C7d01b50e0d17dc79C8';
+    let t3 = '0x90F79bf6EB2c4f870365E785982E1f101E93b906';
+    let t4 = '0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc';
 
     beforeEach(async () =>{
         const currentBlock = ethers.BigNumber.from(
@@ -15,7 +20,7 @@ describe('NFT', function () {
         NFT = await ethers.getContractFactory('NFT');
         nft = await NFT.deploy('MADDOGZ', 'MDZ', maxNftSupply, maxPurchase);
 
-        [owner, addr1, addr2, _] = await ethers.getSigners();
+        [owner, addr1, addr2, addr3, addr4, _] = await ethers.getSigners();
         await nft.flipSaleIsActive() // Activate Sale
         await nft.setBaseURI('www.one.com')
     })
@@ -23,6 +28,14 @@ describe('NFT', function () {
     describe('Ownership', async () => {
         it('should set the right owner', async () => {
             expect(await nft.owner()).to.equal(owner.address)
+        })
+
+        it('mints first 4 NFTs to team', async () => {
+            expect(await nft.totalSupply()).to.eq(4)
+            expect(await nft.ownerOf(0)).to.eq(t1)
+            expect(await nft.ownerOf(1)).to.eq(t2)
+            expect(await nft.ownerOf(2)).to.eq(t3)
+            expect(await nft.ownerOf(3)).to.eq(t4)
         })
     })
 
@@ -49,20 +62,19 @@ describe('NFT', function () {
     describe('Trade NFT', async () => {
         it('should transfer NFT ownership to purchaser, emit purchase event', async () => {
             let amount = 10
-            let tx = await nft.connect(addr1).mint(amount, {value: parseEther('0.8')})
+            let tx = await nft.connect(addr4).mint(amount, {value: parseEther('0.8')})
 
-            addr1balance = await web3.eth.getBalance(addr1.address);
             let receipt = await tx.wait()
             let event = receipt.events[0].args
-            expect(event[1]).to.eq(addr1.address)
-            expect(event[2]).to.eq(1)
+            // Team has already minted 4 NFTs
+            expect(event[1]).to.eq(addr4.address)
+            expect(event[2]).to.eq(5)
             // Check NFT balances
-            expect(await nft.balanceOf(addr1.address)).to.eq(10)
-            expect(await nft.totalSupply()).to.eq(10)
-            expect(await nft.balanceOf(nft.address)).to.eq(0)
+            expect(await nft.balanceOf(addr4.address)).to.eq(10)
+            expect(await nft.totalSupply()).to.eq(14)
             // Remaining unminted tokens
-            let mintedCount = await nft.totalSupply()
-            expect(maxNftSupply - mintedCount).to.eq(11101)
+            let totalSupply = await nft.totalSupply()
+            expect(maxNftSupply - totalSupply).to.eq(11097)
         })
     })
 })

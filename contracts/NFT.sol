@@ -57,6 +57,12 @@ import "hardhat/console.sol";
     constructor(string memory name, string memory symbol, string memory baseURIp, uint256 startingIndex) ERC721(name, symbol) public {
       setBaseURI(baseURIp);
       STARTING_INDEX = startingIndex;
+
+      // team gets first four NFTs
+      _safeMint( t1, 0);
+      _safeMint( t2, 1);
+      _safeMint( t3, 2);
+      _safeMint( t4, 3);
     }
 
     /**
