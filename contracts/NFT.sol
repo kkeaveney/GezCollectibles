@@ -45,6 +45,11 @@ import "hardhat/console.sol";
 
     mapping (uint => bool) public sold;
 
+    // withdraw addresses
+    address t1 = 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266;
+    address t2 = 0x70997970C51812dc3A010C7d01b50e0d17dc79C8;
+    address t3 = 0x90F79bf6EB2c4f870365E785982E1f101E93b906;
+    address t4 = 0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc;
 
     /**
     Contract constructor
