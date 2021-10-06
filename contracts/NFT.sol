@@ -1,92 +1,176 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.6.0 <0.8.0;
+pragma solidity >=0.6.0 <=0.8.0;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "hardhat/console.sol";
 
-contract NFT is ERC721, Ownable {
+  contract NFT is ERC721Enumerable, Ownable {
 
-  using SafeMath for uint256;
-  using Counters for Counters.Counter;
+    using SafeMath for uint256;
 
-  uint256[] private allTokens;
-
-  uint public nftPrice = 80000000000000000; //0.08 ETH
-
-  uint public MAX_PURCHASE;
-  uint public MAX_NFTS;
-
-  bool public saleIsActive = false;
-
-  uint256 public REVEAL_TIMESTAMP;
-
-  address payable public _owner;
-  mapping (uint => bool) public sold;
-
-  uint public mintPrice;
-  Counters.Counter private _tokenIdCounter;
-
-
-  event Purchase(address owner, uint price, uint id, string uri);
-
-  constructor(uint _mintPrice, string memory _name, string memory _symbol, uint256 _maxNFTs, uint256 _maxPurchase) ERC721(_name, _symbol) public {
-    mintPrice = _mintPrice;
-    MAX_NFTS = _maxNFTs;
-    MAX_PURCHASE = _maxPurchase;
-    _owner = msg.sender;
-  }
-
-  function mint(uint256 _count) public payable  returns (bool) {
-    require(saleIsActive, "Sale must be active for minting");
-    require(_count <= MAX_PURCHASE, 'Can only mint 10 NFTs at a time');
-    require(msg.value == mintPrice * _count, "Insuffcient Amount Sent");
-
-    require(_tokenIdCounter.current() <= MAX_NFTS, "At max supply");
-
-    for(uint i=1; i<=_count; i++) {
-      uint256 _tokenID = _tokenIdCounter.current();
-      _safeMint(msg.sender, _tokenID + 1);
-      _tokenIdCounter.increment();
+    struct NFTDetail {
+      uint256 first_encounter;
     }
-  }
 
-  function setBaseURI(string memory baseURI_) public onlyOwner {
-    _setBaseURI(baseURI_);
-  }
+    // Events
+    event Purchase(address owner, uint price, uint id, string uri);
 
-  function setTotalSupply(uint _totalSupply) public onlyOwner {
-    MAX_NFTS = _totalSupply;
-  }
+    event TokenMinted(uint256 tokenId, address owner, uint256 first_encounter);
 
-  function setRevealTimestamp(uint256 _revealTimeStamp) public onlyOwner {
-    REVEAL_TIMESTAMP = _revealTimeStamp;
-  }
+    // Starting Index
+    uint256 STARTING_INDEX;
 
-  function flipSaleIsActive() public onlyOwner {
-    saleIsActive = !saleIsActive;
-  }
+    // Maximum number of Tokens to mint
+    uint public MAX_PURCHASE = 10;
 
-  function mintCount() public view onlyOwner returns (uint){
-    return _tokenIdCounter.current();
-  }
+    // Maximum number of tokens to supply
+    uint public MAX_NFTS = 11111;
 
-  function buy(uint _id) external payable {
-    _validate(_id); //check req. for trade
-    _trade(_id); //swap nft for eth
-    emit Purchase(msg.sender, mintPrice, _id, tokenURI(_id));
-  }
+    // Current price
+    uint256 public CURRENT_PRICE = 80000000000000000; //0.08 ETH
 
-  function _validate(uint _id) internal {
-  	require(_exists(_id), "Error, wrong Token id"); //not exists
-    require(!sold[_id], "Error, Token is sold"); //already sold
-    require(msg.value >= mintPrice, "Error, Token costs more"); //costs more
-  }
+    // Define is sale is active
+    bool public saleIsActive = false;
 
-  function _trade(uint _id) internal {
-  	_transfer(address(this), msg.sender, _id); //nft to user
-  	_owner.transfer(msg.value); //eth to owner
-  	sold[_id] = true; //nft is sold
-  }
+    // owner address
+    address payable public _owner;
+
+    // NFT details
+    mapping(uint256 => NFTDetail) private _nftDetail;
+
+    // Base URI
+    string private baseURI;
+
+    mapping (uint => bool) public sold;
+
+
+    /**
+    Contract constructor
+    */
+    constructor(string memory name, string memory symbol, string memory baseURIp, uint256 startingIndex) ERC721(name, symbol) public {
+      setBaseURI(baseURIp);
+      STARTING_INDEX = startingIndex;
+    }
+
+    /**
+    Withdraw
+     */
+    function withdraw() public onlyOwner {
+      uint256 balance = address(this).balance;
+      payable(msg.sender).transfer(balance);
+    }
+
+    /**
+    Reserve tokens
+    */
+    function reserveTokens() public onlyOwner {
+      uint i;
+      uint tokenId;
+      uint256 first_encounter = block.timestamp;
+        for(i = 1; i <=20; i++) {
+          tokenId = totalSupply().add(1);
+          if(tokenId <= MAX_NFTS) {
+            _nftDetail[tokenId] = NFTDetail(first_encounter);
+            _safeMint(msg.sender, tokenId);
+            emit TokenMinted(tokenId, msg.sender, first_encounter);
+        }
+      }
+    }
+    /**
+    Mint unique token
+    */
+    function mintToken(uint256 tokenId) public onlyOwner {
+      require(!_exists(tokenId));
+      _safeMint((msg.sender), tokenId);
+      uint256 first_encounter = block.timestamp;
+      _nftDetail[tokenId] = NFTDetail(first_encounter);
+      emit TokenMinted(tokenId, msg.sender, first_encounter);
+    }
+    /**
+    Mint tokens
+     */
+    function mint(uint256 numOfTokens) public payable {
+      require(saleIsActive, "Sale must be active for minting");
+      require(numOfTokens <= MAX_PURCHASE, 'Can only mint 10 NFTs at a time');
+      require(totalSupply().add(numOfTokens) <= MAX_NFTS, "At max Supply");
+      require(msg.value == CURRENT_PRICE * numOfTokens, "Ether value sent is not correct");
+
+        for(uint i=1; i<=numOfTokens; i++) {
+          uint256 _tokenId = totalSupply().add(1);
+          _safeMint(msg.sender, _tokenId);
+          uint256 first_encounter = block.timestamp;
+          _nftDetail[_tokenId] = NFTDetail(first_encounter);
+          emit TokenMinted(_tokenId, msg.sender, first_encounter);
+        }
+    }
+
+    /**
+    set starting index
+    */
+    function setStartingIndex(uint256 startingIndex) public onlyOwner {
+       STARTING_INDEX = startingIndex;
+     }
+
+     /**
+     Set current price
+    */
+    function setCurrentPrice(uint256 price) public onlyOwner {
+      CURRENT_PRICE = price;
+    }
+
+    /**
+    Set maximum number of tokens
+    */
+    function setMaxTokens(uint256 maxTokens) public onlyOwner {
+      MAX_NFTS = maxTokens;
+    }
+    /**
+    Set base URI
+    */
+
+    function setBaseURI(string memory BaseURI) public onlyOwner {
+      baseURI = BaseURI;
+    }
+
+    /**
+    return baseURI
+     */
+    function _baseURI() internal view virtual override returns (string memory) {
+      return baseURI;
+    }
+
+    /**
+    Flip active sale
+    */
+    function flipSaleIsActive() public onlyOwner {
+      saleIsActive = !saleIsActive;
+    }
+
+    /**
+    get Token detail
+    */
+    function getTokenDetail(uint256 tokenId) public view returns (NFTDetail memory detail) {
+      return _nftDetail[tokenId];
+    }
+
+    function buy(uint id) external payable {
+      _validate(id); //check req. for trade
+      _trade(id); //swap nft for eth
+      emit Purchase(msg.sender, CURRENT_PRICE, id, tokenURI(id));
+    }
+
+    function _validate(uint id) internal {
+      require(_exists(id), "Error, wrong Token id"); //not exists
+      require(!sold[id], "Error, Token is sold"); //already sold
+      require(msg.value >= CURRENT_PRICE, "Error, Token costs more"); //costs more
+    }
+
+    function _trade(uint id) internal {
+      _transfer(address(this), msg.sender, id); //nft to user
+      _owner.transfer(msg.value); //eth to owner
+      sold[id] = true; //nft is sold
+    }
+
 }

@@ -22,31 +22,31 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface NFTInterface extends ethers.utils.Interface {
   functions: {
+    "CURRENT_PRICE()": FunctionFragment;
     "MAX_NFTS()": FunctionFragment;
     "MAX_PURCHASE()": FunctionFragment;
-    "REVEAL_TIMESTAMP()": FunctionFragment;
     "_owner()": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
-    "baseURI()": FunctionFragment;
     "buy(uint256)": FunctionFragment;
     "flipSaleIsActive()": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
+    "getTokenDetail(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "mint(uint256)": FunctionFragment;
-    "mintCount()": FunctionFragment;
-    "mintPrice()": FunctionFragment;
+    "mintToken(uint256)": FunctionFragment;
     "name()": FunctionFragment;
-    "nftPrice()": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
+    "reserveTokens()": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "saleIsActive()": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
     "setBaseURI(string)": FunctionFragment;
-    "setRevealTimestamp(uint256)": FunctionFragment;
-    "setTotalSupply(uint256)": FunctionFragment;
+    "setCurrentPrice(uint256)": FunctionFragment;
+    "setMaxTokens(uint256)": FunctionFragment;
+    "setStartingIndex(uint256)": FunctionFragment;
     "sold(uint256)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
@@ -56,15 +56,16 @@ interface NFTInterface extends ethers.utils.Interface {
     "totalSupply()": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
+    "withdraw()": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "CURRENT_PRICE",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "MAX_NFTS", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "MAX_PURCHASE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "REVEAL_TIMESTAMP",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "_owner", values?: undefined): string;
@@ -73,7 +74,6 @@ interface NFTInterface extends ethers.utils.Interface {
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
-  encodeFunctionData(functionFragment: "baseURI", values?: undefined): string;
   encodeFunctionData(functionFragment: "buy", values: [BigNumberish]): string;
   encodeFunctionData(
     functionFragment: "flipSaleIsActive",
@@ -84,14 +84,19 @@ interface NFTInterface extends ethers.utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "getTokenDetail",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "isApprovedForAll",
     values: [string, string]
   ): string;
   encodeFunctionData(functionFragment: "mint", values: [BigNumberish]): string;
-  encodeFunctionData(functionFragment: "mintCount", values?: undefined): string;
-  encodeFunctionData(functionFragment: "mintPrice", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "mintToken",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
-  encodeFunctionData(functionFragment: "nftPrice", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "ownerOf",
@@ -99,6 +104,10 @@ interface NFTInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "reserveTokens",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -115,11 +124,15 @@ interface NFTInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "setBaseURI", values: [string]): string;
   encodeFunctionData(
-    functionFragment: "setRevealTimestamp",
+    functionFragment: "setCurrentPrice",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "setTotalSupply",
+    functionFragment: "setMaxTokens",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setStartingIndex",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "sold", values: [BigNumberish]): string;
@@ -152,20 +165,20 @@ interface NFTInterface extends ethers.utils.Interface {
     functionFragment: "transferOwnership",
     values: [string]
   ): string;
+  encodeFunctionData(functionFragment: "withdraw", values?: undefined): string;
 
+  decodeFunctionResult(
+    functionFragment: "CURRENT_PRICE",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "MAX_NFTS", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "MAX_PURCHASE",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "REVEAL_TIMESTAMP",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "_owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "baseURI", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "buy", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "flipSaleIsActive",
@@ -176,18 +189,24 @@ interface NFTInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "getTokenDetail",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "isApprovedForAll",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "mintCount", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "mintPrice", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "mintToken", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "nftPrice", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "reserveTokens",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -204,11 +223,15 @@ interface NFTInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "setBaseURI", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "setRevealTimestamp",
+    functionFragment: "setCurrentPrice",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "setTotalSupply",
+    functionFragment: "setMaxTokens",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setStartingIndex",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "sold", data: BytesLike): Result;
@@ -238,12 +261,14 @@ interface NFTInterface extends ethers.utils.Interface {
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
 
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Purchase(address,uint256,uint256,string)": EventFragment;
+    "TokenMinted(uint256,address,uint256)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
   };
 
@@ -251,6 +276,7 @@ interface NFTInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Purchase"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TokenMinted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
 }
 
@@ -298,6 +324,10 @@ export class NFT extends Contract {
   interface: NFTInterface;
 
   functions: {
+    CURRENT_PRICE(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    "CURRENT_PRICE()"(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     MAX_NFTS(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     "MAX_NFTS()"(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -305,10 +335,6 @@ export class NFT extends Contract {
     MAX_PURCHASE(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     "MAX_PURCHASE()"(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    REVEAL_TIMESTAMP(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    "REVEAL_TIMESTAMP()"(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     _owner(overrides?: CallOverrides): Promise<[string]>;
 
@@ -333,17 +359,13 @@ export class NFT extends Contract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    baseURI(overrides?: CallOverrides): Promise<[string]>;
-
-    "baseURI()"(overrides?: CallOverrides): Promise<[string]>;
-
     buy(
-      _id: BigNumberish,
+      id: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     "buy(uint256)"(
-      _id: BigNumberish,
+      id: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -365,6 +387,24 @@ export class NFT extends Contract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
+    getTokenDetail(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [[BigNumber] & { first_encounter: BigNumber }] & {
+        detail: [BigNumber] & { first_encounter: BigNumber };
+      }
+    >;
+
+    "getTokenDetail(uint256)"(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [[BigNumber] & { first_encounter: BigNumber }] & {
+        detail: [BigNumber] & { first_encounter: BigNumber };
+      }
+    >;
+
     isApprovedForAll(
       owner: string,
       operator: string,
@@ -378,30 +418,28 @@ export class NFT extends Contract {
     ): Promise<[boolean]>;
 
     mint(
-      _count: BigNumberish,
+      numOfTokens: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     "mint(uint256)"(
-      _count: BigNumberish,
+      numOfTokens: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    mintCount(overrides?: CallOverrides): Promise<[BigNumber]>;
+    mintToken(
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
-    "mintCount()"(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    mintPrice(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    "mintPrice()"(overrides?: CallOverrides): Promise<[BigNumber]>;
+    "mintToken(uint256)"(
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     name(overrides?: CallOverrides): Promise<[string]>;
 
     "name()"(overrides?: CallOverrides): Promise<[string]>;
-
-    nftPrice(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    "nftPrice()"(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
@@ -422,6 +460,14 @@ export class NFT extends Contract {
     ): Promise<ContractTransaction>;
 
     "renounceOwnership()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    reserveTokens(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "reserveTokens()"(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -457,32 +503,42 @@ export class NFT extends Contract {
     ): Promise<ContractTransaction>;
 
     setBaseURI(
-      baseURI_: string,
+      BaseURI: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     "setBaseURI(string)"(
-      baseURI_: string,
+      BaseURI: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    setRevealTimestamp(
-      _revealTimeStamp: BigNumberish,
+    setCurrentPrice(
+      price: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    "setRevealTimestamp(uint256)"(
-      _revealTimeStamp: BigNumberish,
+    "setCurrentPrice(uint256)"(
+      price: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    setTotalSupply(
-      _totalSupply: BigNumberish,
+    setMaxTokens(
+      maxTokens: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    "setTotalSupply(uint256)"(
-      _totalSupply: BigNumberish,
+    "setMaxTokens(uint256)"(
+      maxTokens: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setStartingIndex(
+      startingIndex: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "setStartingIndex(uint256)"(
+      startingIndex: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -566,7 +622,19 @@ export class NFT extends Contract {
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    withdraw(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "withdraw()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
   };
+
+  CURRENT_PRICE(overrides?: CallOverrides): Promise<BigNumber>;
+
+  "CURRENT_PRICE()"(overrides?: CallOverrides): Promise<BigNumber>;
 
   MAX_NFTS(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -575,10 +643,6 @@ export class NFT extends Contract {
   MAX_PURCHASE(overrides?: CallOverrides): Promise<BigNumber>;
 
   "MAX_PURCHASE()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-  REVEAL_TIMESTAMP(overrides?: CallOverrides): Promise<BigNumber>;
-
-  "REVEAL_TIMESTAMP()"(overrides?: CallOverrides): Promise<BigNumber>;
 
   _owner(overrides?: CallOverrides): Promise<string>;
 
@@ -603,17 +667,13 @@ export class NFT extends Contract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  baseURI(overrides?: CallOverrides): Promise<string>;
-
-  "baseURI()"(overrides?: CallOverrides): Promise<string>;
-
   buy(
-    _id: BigNumberish,
+    id: BigNumberish,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   "buy(uint256)"(
-    _id: BigNumberish,
+    id: BigNumberish,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -635,6 +695,16 @@ export class NFT extends Contract {
     overrides?: CallOverrides
   ): Promise<string>;
 
+  getTokenDetail(
+    tokenId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<[BigNumber] & { first_encounter: BigNumber }>;
+
+  "getTokenDetail(uint256)"(
+    tokenId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<[BigNumber] & { first_encounter: BigNumber }>;
+
   isApprovedForAll(
     owner: string,
     operator: string,
@@ -648,30 +718,28 @@ export class NFT extends Contract {
   ): Promise<boolean>;
 
   mint(
-    _count: BigNumberish,
+    numOfTokens: BigNumberish,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   "mint(uint256)"(
-    _count: BigNumberish,
+    numOfTokens: BigNumberish,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  mintCount(overrides?: CallOverrides): Promise<BigNumber>;
+  mintToken(
+    tokenId: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
-  "mintCount()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-  mintPrice(overrides?: CallOverrides): Promise<BigNumber>;
-
-  "mintPrice()"(overrides?: CallOverrides): Promise<BigNumber>;
+  "mintToken(uint256)"(
+    tokenId: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   name(overrides?: CallOverrides): Promise<string>;
 
   "name()"(overrides?: CallOverrides): Promise<string>;
-
-  nftPrice(overrides?: CallOverrides): Promise<BigNumber>;
-
-  "nftPrice()"(overrides?: CallOverrides): Promise<BigNumber>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
@@ -689,6 +757,14 @@ export class NFT extends Contract {
   ): Promise<ContractTransaction>;
 
   "renounceOwnership()"(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  reserveTokens(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "reserveTokens()"(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -724,32 +800,42 @@ export class NFT extends Contract {
   ): Promise<ContractTransaction>;
 
   setBaseURI(
-    baseURI_: string,
+    BaseURI: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   "setBaseURI(string)"(
-    baseURI_: string,
+    BaseURI: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  setRevealTimestamp(
-    _revealTimeStamp: BigNumberish,
+  setCurrentPrice(
+    price: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  "setRevealTimestamp(uint256)"(
-    _revealTimeStamp: BigNumberish,
+  "setCurrentPrice(uint256)"(
+    price: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  setTotalSupply(
-    _totalSupply: BigNumberish,
+  setMaxTokens(
+    maxTokens: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  "setTotalSupply(uint256)"(
-    _totalSupply: BigNumberish,
+  "setMaxTokens(uint256)"(
+    maxTokens: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setStartingIndex(
+    startingIndex: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "setStartingIndex(uint256)"(
+    startingIndex: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -831,7 +917,19 @@ export class NFT extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  withdraw(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "withdraw()"(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   callStatic: {
+    CURRENT_PRICE(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "CURRENT_PRICE()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     MAX_NFTS(overrides?: CallOverrides): Promise<BigNumber>;
 
     "MAX_NFTS()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -839,10 +937,6 @@ export class NFT extends Contract {
     MAX_PURCHASE(overrides?: CallOverrides): Promise<BigNumber>;
 
     "MAX_PURCHASE()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    REVEAL_TIMESTAMP(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "REVEAL_TIMESTAMP()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     _owner(overrides?: CallOverrides): Promise<string>;
 
@@ -867,13 +961,9 @@ export class NFT extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    baseURI(overrides?: CallOverrides): Promise<string>;
+    buy(id: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
-    "baseURI()"(overrides?: CallOverrides): Promise<string>;
-
-    buy(_id: BigNumberish, overrides?: CallOverrides): Promise<void>;
-
-    "buy(uint256)"(_id: BigNumberish, overrides?: CallOverrides): Promise<void>;
+    "buy(uint256)"(id: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     flipSaleIsActive(overrides?: CallOverrides): Promise<void>;
 
@@ -889,6 +979,16 @@ export class NFT extends Contract {
       overrides?: CallOverrides
     ): Promise<string>;
 
+    getTokenDetail(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { first_encounter: BigNumber }>;
+
+    "getTokenDetail(uint256)"(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { first_encounter: BigNumber }>;
+
     isApprovedForAll(
       owner: string,
       operator: string,
@@ -901,28 +1001,23 @@ export class NFT extends Contract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    mint(_count: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
+    mint(numOfTokens: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     "mint(uint256)"(
-      _count: BigNumberish,
+      numOfTokens: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<boolean>;
+    ): Promise<void>;
 
-    mintCount(overrides?: CallOverrides): Promise<BigNumber>;
+    mintToken(tokenId: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
-    "mintCount()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    mintPrice(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "mintPrice()"(overrides?: CallOverrides): Promise<BigNumber>;
+    "mintToken(uint256)"(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     name(overrides?: CallOverrides): Promise<string>;
 
     "name()"(overrides?: CallOverrides): Promise<string>;
-
-    nftPrice(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "nftPrice()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -938,6 +1033,10 @@ export class NFT extends Contract {
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
     "renounceOwnership()"(overrides?: CallOverrides): Promise<void>;
+
+    reserveTokens(overrides?: CallOverrides): Promise<void>;
+
+    "reserveTokens()"(overrides?: CallOverrides): Promise<void>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: string,
@@ -970,30 +1069,40 @@ export class NFT extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setBaseURI(baseURI_: string, overrides?: CallOverrides): Promise<void>;
+    setBaseURI(BaseURI: string, overrides?: CallOverrides): Promise<void>;
 
     "setBaseURI(string)"(
-      baseURI_: string,
+      BaseURI: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setRevealTimestamp(
-      _revealTimeStamp: BigNumberish,
+    setCurrentPrice(
+      price: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    "setRevealTimestamp(uint256)"(
-      _revealTimeStamp: BigNumberish,
+    "setCurrentPrice(uint256)"(
+      price: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setTotalSupply(
-      _totalSupply: BigNumberish,
+    setMaxTokens(
+      maxTokens: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    "setTotalSupply(uint256)"(
-      _totalSupply: BigNumberish,
+    "setMaxTokens(uint256)"(
+      maxTokens: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setStartingIndex(
+      startingIndex: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "setStartingIndex(uint256)"(
+      startingIndex: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1074,6 +1183,10 @@ export class NFT extends Contract {
       newOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    withdraw(overrides?: CallOverrides): Promise<void>;
+
+    "withdraw()"(overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {
@@ -1113,6 +1226,15 @@ export class NFT extends Contract {
       { owner: string; price: BigNumber; id: BigNumber; uri: string }
     >;
 
+    TokenMinted(
+      tokenId: null,
+      owner: null,
+      first_encounter: null
+    ): TypedEventFilter<
+      [BigNumber, string, BigNumber],
+      { tokenId: BigNumber; owner: string; first_encounter: BigNumber }
+    >;
+
     Transfer(
       from: string | null,
       to: string | null,
@@ -1124,6 +1246,10 @@ export class NFT extends Contract {
   };
 
   estimateGas: {
+    CURRENT_PRICE(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "CURRENT_PRICE()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     MAX_NFTS(overrides?: CallOverrides): Promise<BigNumber>;
 
     "MAX_NFTS()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1131,10 +1257,6 @@ export class NFT extends Contract {
     MAX_PURCHASE(overrides?: CallOverrides): Promise<BigNumber>;
 
     "MAX_PURCHASE()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    REVEAL_TIMESTAMP(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "REVEAL_TIMESTAMP()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     _owner(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1159,17 +1281,13 @@ export class NFT extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    baseURI(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "baseURI()"(overrides?: CallOverrides): Promise<BigNumber>;
-
     buy(
-      _id: BigNumberish,
+      id: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     "buy(uint256)"(
-      _id: BigNumberish,
+      id: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1191,6 +1309,16 @@ export class NFT extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getTokenDetail(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "getTokenDetail(uint256)"(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     isApprovedForAll(
       owner: string,
       operator: string,
@@ -1204,30 +1332,28 @@ export class NFT extends Contract {
     ): Promise<BigNumber>;
 
     mint(
-      _count: BigNumberish,
+      numOfTokens: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     "mint(uint256)"(
-      _count: BigNumberish,
+      numOfTokens: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    mintCount(overrides?: CallOverrides): Promise<BigNumber>;
+    mintToken(
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
-    "mintCount()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    mintPrice(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "mintPrice()"(overrides?: CallOverrides): Promise<BigNumber>;
+    "mintToken(uint256)"(
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
     "name()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    nftPrice(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "nftPrice()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1248,6 +1374,14 @@ export class NFT extends Contract {
     ): Promise<BigNumber>;
 
     "renounceOwnership()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    reserveTokens(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "reserveTokens()"(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1283,32 +1417,42 @@ export class NFT extends Contract {
     ): Promise<BigNumber>;
 
     setBaseURI(
-      baseURI_: string,
+      BaseURI: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     "setBaseURI(string)"(
-      baseURI_: string,
+      BaseURI: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    setRevealTimestamp(
-      _revealTimeStamp: BigNumberish,
+    setCurrentPrice(
+      price: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "setRevealTimestamp(uint256)"(
-      _revealTimeStamp: BigNumberish,
+    "setCurrentPrice(uint256)"(
+      price: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    setTotalSupply(
-      _totalSupply: BigNumberish,
+    setMaxTokens(
+      maxTokens: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "setTotalSupply(uint256)"(
-      _totalSupply: BigNumberish,
+    "setMaxTokens(uint256)"(
+      maxTokens: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setStartingIndex(
+      startingIndex: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "setStartingIndex(uint256)"(
+      startingIndex: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1392,9 +1536,21 @@ export class NFT extends Contract {
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    withdraw(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "withdraw()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    CURRENT_PRICE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "CURRENT_PRICE()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     MAX_NFTS(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "MAX_NFTS()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -1402,12 +1558,6 @@ export class NFT extends Contract {
     MAX_PURCHASE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "MAX_PURCHASE()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    REVEAL_TIMESTAMP(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    "REVEAL_TIMESTAMP()"(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
 
     _owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1435,17 +1585,13 @@ export class NFT extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    baseURI(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    "baseURI()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     buy(
-      _id: BigNumberish,
+      id: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     "buy(uint256)"(
-      _id: BigNumberish,
+      id: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1467,6 +1613,16 @@ export class NFT extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getTokenDetail(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "getTokenDetail(uint256)"(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     isApprovedForAll(
       owner: string,
       operator: string,
@@ -1480,30 +1636,28 @@ export class NFT extends Contract {
     ): Promise<PopulatedTransaction>;
 
     mint(
-      _count: BigNumberish,
+      numOfTokens: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     "mint(uint256)"(
-      _count: BigNumberish,
+      numOfTokens: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    mintCount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    mintToken(
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
-    "mintCount()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    mintPrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    "mintPrice()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    "mintToken(uint256)"(
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "name()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    nftPrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    "nftPrice()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1524,6 +1678,14 @@ export class NFT extends Contract {
     ): Promise<PopulatedTransaction>;
 
     "renounceOwnership()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    reserveTokens(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "reserveTokens()"(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1559,32 +1721,42 @@ export class NFT extends Contract {
     ): Promise<PopulatedTransaction>;
 
     setBaseURI(
-      baseURI_: string,
+      BaseURI: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     "setBaseURI(string)"(
-      baseURI_: string,
+      BaseURI: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    setRevealTimestamp(
-      _revealTimeStamp: BigNumberish,
+    setCurrentPrice(
+      price: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    "setRevealTimestamp(uint256)"(
-      _revealTimeStamp: BigNumberish,
+    "setCurrentPrice(uint256)"(
+      price: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    setTotalSupply(
-      _totalSupply: BigNumberish,
+    setMaxTokens(
+      maxTokens: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    "setTotalSupply(uint256)"(
-      _totalSupply: BigNumberish,
+    "setMaxTokens(uint256)"(
+      maxTokens: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setStartingIndex(
+      startingIndex: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "setStartingIndex(uint256)"(
+      startingIndex: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1669,6 +1841,14 @@ export class NFT extends Contract {
 
     "transferOwnership(address)"(
       newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    withdraw(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "withdraw()"(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };
