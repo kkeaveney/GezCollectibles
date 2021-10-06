@@ -46,10 +46,10 @@ import "hardhat/console.sol";
     mapping (uint => bool) public sold;
 
     // withdraw addresses
-    address t1 = 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266;
-    address t2 = 0x70997970C51812dc3A010C7d01b50e0d17dc79C8;
-    address t3 = 0x90F79bf6EB2c4f870365E785982E1f101E93b906;
-    address t4 = 0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc;
+    address t1 = 0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199;
+    address t2 = 0xdD2FD4581271e230360230F9337D5c0430Bf44C0;
+    address t3 = 0xbDA5747bFD65F08deb54cb465eB87D40e51B197E;
+    address t4 = 0x2546BcD3c84621e976D8185a91A922aE77ECEc30;
 
     /**
     Contract constructor
@@ -66,13 +66,15 @@ import "hardhat/console.sol";
     }
 
     /**
-    Withdraw
+    Withdraw split between founders
      */
-    function withdraw() public onlyOwner {
-      uint256 balance = address(this).balance;
-      payable(msg.sender).transfer(balance);
+    function withdrawAll() public onlyOwner {
+      uint256 _each = address(this).balance / 4;
+      require(payable(t1).send(_each));
+      require(payable(t2).send(_each));
+      require(payable(t3).send(_each));
+      require(payable(t4).send(_each));
     }
-
     /**
     Reserve tokens
     */
