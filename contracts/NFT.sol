@@ -45,6 +45,11 @@ import "hardhat/console.sol";
 
     mapping (uint => bool) public sold;
 
+    // withdraw addresses
+    address t1 = 0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199;
+    address t2 = 0xdD2FD4581271e230360230F9337D5c0430Bf44C0;
+    address t3 = 0xbDA5747bFD65F08deb54cb465eB87D40e51B197E;
+    address t4 = 0x2546BcD3c84621e976D8185a91A922aE77ECEc30;
 
     /**
     Contract constructor
@@ -52,16 +57,24 @@ import "hardhat/console.sol";
     constructor(string memory name, string memory symbol, string memory baseURIp, uint256 startingIndex) ERC721(name, symbol) public {
       setBaseURI(baseURIp);
       STARTING_INDEX = startingIndex;
+
+      // team gets first four NFTs
+      _safeMint( t1, 0);
+      _safeMint( t2, 1);
+      _safeMint( t3, 2);
+      _safeMint( t4, 3);
     }
 
     /**
-    Withdraw
+    Withdraw split between founders
      */
-    function withdraw() public onlyOwner {
-      uint256 balance = address(this).balance;
-      payable(msg.sender).transfer(balance);
+    function withdrawAll() public onlyOwner {
+      uint256 _each = address(this).balance / 4;
+      require(payable(t1).send(_each));
+      require(payable(t2).send(_each));
+      require(payable(t3).send(_each));
+      require(payable(t4).send(_each));
     }
-
     /**
     Reserve tokens
     */
