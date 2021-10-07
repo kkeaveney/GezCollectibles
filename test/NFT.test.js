@@ -4,7 +4,7 @@ const { parseEther } = require("ethers/lib/utils");
 
 
 describe('NFT', function () {
-    let NFT, nft, owner, addr1, addr2, vault, vault2, currentBlock
+    let nft, owner, token, addr1, addr2, vault, vault2, currentBlock
     const maxNftSupply = 11111;
     const maxPurchase = 10;
     const price = parseEther('0.8')
@@ -13,9 +13,11 @@ describe('NFT', function () {
         currentBlock = ethers.BigNumber.from(
         await ethers.provider.getBlockNumber())
 
-        NFT = await ethers.getContractFactory('NFT');
+        const NFT = await ethers.getContractFactory('NFT');
         nft = await NFT.deploy('MADDOGZ', 'MDZ', maxNftSupply, maxPurchase);
 
+        const Token = await ethers.getContractFactory('Token');
+        token = await Token.deploy('NFToken', 'NFT');
 
         [owner, addr1, addr2, vault, vault2, _] = await ethers.getSigners();
         await nft.flipSaleIsActive() // Activate Sale
@@ -107,7 +109,18 @@ describe('NFT', function () {
         })
 
         it('forward ERC20 tokens', async () => {
-
+            let amount = '100'
+            // Transfer ERC20s
+            await token.transfer(nft.address, parseEther(amount))
+            expect(await token.balanceOf(nft.address)).to.eq(parseEther(amount))
+            // vault hasn't been set yet
+            await (expect(nft.forwardERC20s(token.address, 100))).to.be.revertedWith('no vault')
+            // set vault and transfer ERC20s
+            await nft.setVault(vault2.address)
+            await nft.forwardERC20s(token.address, parseEther(amount))
+            // check balances
+            expect(await token.balanceOf(vault2.address)).to.eq(parseEther('100'))
+            expect(await token.balanceOf(nft.address)).to.eq(parseEther('0'))
         })
     })
 })
