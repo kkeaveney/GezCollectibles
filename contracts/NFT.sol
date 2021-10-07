@@ -114,7 +114,7 @@ import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
      */
     function withdraw(uint _amount) public onlyOwner {
       require(address(vault) != address(0), 'no vault');
-      require(address(this).balance >= _amount);
+      require(address(this).balance >= _amount, 'withdrawl amount exceeds contract balance');
       payable(vault).transfer(_amount);
     }
 

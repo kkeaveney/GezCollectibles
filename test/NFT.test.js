@@ -3,7 +3,7 @@ const { ethers, web3 } = require('hardhat')
 const { parseEther } = require("ethers/lib/utils");
 
 describe('NFT', function () {
-    let NFT, nft, owner, addr1, addr2, currentBlock
+    let NFT, nft, owner, addr1, addr2, vault, vault2, currentBlock
     const maxNftSupply = 11111;
     const maxPurchase = 10;
     const price = parseEther('0.8')
@@ -15,7 +15,7 @@ describe('NFT', function () {
         NFT = await ethers.getContractFactory('NFT');
         nft = await NFT.deploy('MADDOGZ', 'MDZ', maxNftSupply, maxPurchase);
 
-        [owner, addr1, addr2, _] = await ethers.getSigners();
+        [owner, addr1, addr2, vault, vault2,_] = await ethers.getSigners();
         await nft.flipSaleIsActive() // Activate Sale
         await nft.setBaseURI('www.batz.com')
     })
@@ -77,6 +77,31 @@ describe('NFT', function () {
             expect(await nft.tokenOfOwnerByIndex(addr1.address,0)).to.eq(1)
             expect(await nft.tokenByIndex(0)).to.eq(1)
             let num = await nft.getTokenDetail(1)
+        })
+    })
+
+    describe('Vault access', async () => {
+        it('prevents non-owners to change vault address', async () => {
+            await(expect(nft.connect(addr2).setVault(vault.address)).to.be.revertedWith('Ownable: caller is not the owner'))
+        })
+
+        it('restricts withdrawal to the owner only', async () => {
+            await(expect(nft.connect(addr2).withdraw(1)).to.be.revertedWith('Ownable: caller is not the owner'))
+        })
+
+        it('it allows the owner to change vault address', async () => {
+            let amount = 10
+            // Mint tokens, confirm contract balance
+            await nft.connect(addr1).mint(amount, {value: price})
+            expect(await web3.eth.getBalance(nft.address)).to.eq(parseEther('.8'))
+            await nft.setVault(vault2.address)
+            // confirm change of vault address
+            expect(await nft.vault()).to.eq(vault2.address)
+            // check vault balance
+            expect(await web3.eth.getBalance(vault2.address)).to.eq(parseEther('10000'))
+            await nft.withdraw(parseEther('0.8'))
+            expect(await web3.eth.getBalance(nft.address)).to.eq(parseEther('0'))
+            expect(await web3.eth.getBalance(vault2.address)).to.eq(parseEther('10000.8'))
         })
     })
 })
