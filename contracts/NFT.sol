@@ -3,54 +3,59 @@ pragma solidity >=0.6.0 <0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
 import "hardhat/console.sol";
 
 contract NFT is ERC721, Ownable {
 
   using SafeMath for uint256;
-  using Counters for Counters.Counter;
 
-  uint256[] private allTokens;
+  // Starting Index
+  uint256 STARTING_INDEX;
 
-  uint public nftPrice = 80000000000000000; //0.08 ETH
+  // Maximum number of Tokens to mint
+  uint public MAX_PURCHASE = 10;
 
-  uint public MAX_PURCHASE;
-  uint public MAX_NFTS;
+  // Maximum number of tokens to supply
+  uint public MAX_NFTS = 11111;
 
-  bool public saleIsActive = false;
+  // Current price
+  uint256 public CURRENT_PRICE = 80000000000000000; //0.08 ETH
 
-  uint256 public REVEAL_TIMESTAMP;
+  // Reveal timestamp
+  uint256 REVEAL_TIMESTAMP;
 
   address payable public _owner;
   mapping (uint => bool) public sold;
 
-  uint public mintPrice;
-  Counters.Counter private _tokenIdCounter;
+  // Define is sale is active
+  bool public saleIsActive = false;
+
 
 
   event Purchase(address owner, uint price, uint id, string uri);
 
-  constructor(uint _mintPrice, string memory _name, string memory _symbol, uint256 _maxNFTs, uint256 _maxPurchase) ERC721(_name, _symbol) public {
-    mintPrice = _mintPrice;
-    MAX_NFTS = _maxNFTs;
-    MAX_PURCHASE = _maxPurchase;
-    _owner = msg.sender;
+
+  constructor(string memory name, string memory symbol, string memory baseURIp, uint256 startingIndex) ERC721(name, symbol) public {
+      _owner = msg.sender;
+      setBaseURI(baseURIp);
+      STARTING_INDEX = startingIndex;
   }
 
-  function mint(uint256 _count) public payable  returns (bool) {
-    require(saleIsActive, "Sale must be active for minting");
-    require(_count <= MAX_PURCHASE, 'Can only mint 10 NFTs at a time');
-    require(msg.value == mintPrice * _count, "Insuffcient Amount Sent");
+  function setStartingIndex(uint256 startingIndex) public onlyOwner {
+       STARTING_INDEX = startingIndex;
+  }
 
-    require(_tokenIdCounter.current() <= MAX_NFTS, "At max supply");
+  function mint(uint256 numOfTokens) public payable {
+      require(saleIsActive, "Sale must be active for minting");
+      require(numOfTokens <= MAX_PURCHASE, 'Can only mint 10 NFTs at a time');
+      require(totalSupply().add(numOfTokens) <= MAX_NFTS, "At max Supply");
+      require(msg.value == CURRENT_PRICE * numOfTokens, "Ether value sent is not correct");
 
-    for(uint i=1; i<=_count; i++) {
-      uint256 _tokenID = _tokenIdCounter.current();
-      _safeMint(msg.sender, _tokenID + 1);
-      _tokenIdCounter.increment();
+        for(uint i=1; i<=numOfTokens; i++) {
+          uint256 _tokenId = totalSupply().add(1);
+          _safeMint(msg.sender, _tokenId);
+        }
     }
-  }
 
   function setBaseURI(string memory baseURI_) public onlyOwner {
     _setBaseURI(baseURI_);
@@ -68,20 +73,16 @@ contract NFT is ERC721, Ownable {
     saleIsActive = !saleIsActive;
   }
 
-  function mintCount() public view onlyOwner returns (uint){
-    return _tokenIdCounter.current();
-  }
-
   function buy(uint _id) external payable {
     _validate(_id); //check req. for trade
     _trade(_id); //swap nft for eth
-    emit Purchase(msg.sender, mintPrice, _id, tokenURI(_id));
+    emit Purchase(msg.sender, CURRENT_PRICE, _id, tokenURI(_id));
   }
 
   function _validate(uint _id) internal {
   	require(_exists(_id), "Error, wrong Token id"); //not exists
     require(!sold[_id], "Error, Token is sold"); //already sold
-    require(msg.value >= mintPrice, "Error, Token costs more"); //costs more
+    require(msg.value >= CURRENT_PRICE, "Error, Token costs more"); //costs more
   }
 
   function _trade(uint _id) internal {

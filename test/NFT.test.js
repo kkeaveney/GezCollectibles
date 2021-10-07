@@ -3,17 +3,19 @@ const { ethers, web3 } = require('hardhat')
 const { parseEther } = require("ethers/lib/utils");
 
 describe('NFT', function () {
-    let NFT, nft, owner, addr1, addr2, totalSupply
+    let NFT, nft, owner, addr1, addr2
     const maxNftSupply = 11111;
-    const maxPurchase = 10;
-    const price = parseEther('0.1')
+    const startingIndex = 0;
+    let baseURL = "www.aaa.com"
+
+    //const price = parseEther('0.1')
 
     beforeEach(async () =>{
         const currentBlock = ethers.BigNumber.from(
         await ethers.provider.getBlockNumber())
 
         NFT = await ethers.getContractFactory('NFT');
-        nft = await NFT.deploy(price, 'MADDOGZ', 'MDZ', maxNftSupply, maxPurchase);
+        nft = await NFT.deploy('MADDOGZ', 'MDZ', baseURL, startingIndex);
 
         [owner, addr1, addr2, _] = await ethers.getSigners();
         await nft.flipSaleIsActive() // Activate Sale
@@ -49,7 +51,7 @@ describe('NFT', function () {
     describe('Trade NFT', async () => {
         it('should transfer NFT ownership to purchaser, emit purchase event', async () => {
             let amount = 10
-            let tx = await nft.connect(addr1).mint(amount, {value: parseEther('1')})
+            let tx = await nft.connect(addr1).mint(amount, {value: parseEther('0.8')})
 
             addr1balance = await web3.eth.getBalance(addr1.address);
             let receipt = await tx.wait()
@@ -58,11 +60,11 @@ describe('NFT', function () {
             expect(event[2]).to.eq(1)
             // Check NFT balances
             expect(await nft.balanceOf(addr1.address)).to.eq(10)
-            expect(await nft.mintCount()).to.eq(10)
+            expect(await nft.totalSupply()).to.eq(10)
             expect(await nft.balanceOf(nft.address)).to.eq(0)
             // Remaining unminted tokens
-            let mintedCount = await nft.mintCount()
-            expect(maxNftSupply - mintedCount).to.eq(11101)
+            let totalSupply = await nft.totalSupply()
+            expect(maxNftSupply - totalSupply).to.eq(11101)
         })
     })
 })
