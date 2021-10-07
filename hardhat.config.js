@@ -14,9 +14,9 @@ require("./tasks/mint")
  */
 module.exports = {
   defaultNetwork: "hardhat",
-  paths: {
-    artifacts: './src/artifacts',
-  },
+  // paths: {
+  //   artifacts: './src/artifacts',
+  // },
   networks: {
     hardhat: {
       chainId: 1337,

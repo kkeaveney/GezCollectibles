@@ -21,13 +21,13 @@ async function main() {
   const Token = await ethers.getContractFactory("Token");
   token = await Token.deploy();
 
-  const NFT = await ethers.getContractFactory("NFT")
+  const NFT = await ethers.getContractFactory("ERC20")
   nft = await NFT.deploy()
 
   console.log("Token deployed to:", token.address);
   console.log("NFT deployed to:", nft.address);
 
-  saveFrontendFiles()
+  //saveFrontendFiles()
 
   //wait for 60 seconds before verify
   await sleep.sleep(60)

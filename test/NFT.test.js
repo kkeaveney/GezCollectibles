@@ -2,6 +2,7 @@ const { expect } = require('chai')
 const { ethers, web3 } = require('hardhat')
 const { parseEther } = require("ethers/lib/utils");
 
+
 describe('NFT', function () {
     let NFT, nft, owner, addr1, addr2, vault, vault2, currentBlock
     const maxNftSupply = 11111;
@@ -15,7 +16,8 @@ describe('NFT', function () {
         NFT = await ethers.getContractFactory('NFT');
         nft = await NFT.deploy('MADDOGZ', 'MDZ', maxNftSupply, maxPurchase);
 
-        [owner, addr1, addr2, vault, vault2,_] = await ethers.getSigners();
+
+        [owner, addr1, addr2, vault, vault2, _] = await ethers.getSigners();
         await nft.flipSaleIsActive() // Activate Sale
         await nft.setBaseURI('www.batz.com')
     })
@@ -102,6 +104,10 @@ describe('NFT', function () {
             await nft.withdraw(parseEther('0.8'))
             expect(await web3.eth.getBalance(nft.address)).to.eq(parseEther('0'))
             expect(await web3.eth.getBalance(vault2.address)).to.eq(parseEther('10000.8'))
+        })
+
+        it('forward ERC20 tokens', async () => {
+
         })
     })
 })
