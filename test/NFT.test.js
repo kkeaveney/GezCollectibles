@@ -79,8 +79,6 @@ describe('NFT', function () {
             expect(await nft.tokenOfOwnerByIndex(addr1.address,0)).to.eq(1)
             expect(await nft.tokenByIndex(0)).to.eq(1)
             let num = await nft.getTokenDetail(1)
-            console.log(currentBlock.toString())
-            
         })
     })
 })
