@@ -4,7 +4,8 @@ pragma solidity >=0.6.0 <=0.8.0;
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-//import "hardhat/console.sol";
+import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+
 
   contract NFT is ERC721Enumerable, Ownable {
 
@@ -37,6 +38,9 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
     // owner address
     address payable public _owner;
 
+    // vault address for funds
+    address public vault;
+
     // NFT details
     mapping(uint256 => NFTDetail) private _nftDetail;
 
@@ -52,14 +56,6 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
     constructor(string memory name, string memory symbol, string memory baseURIp, uint256 startingIndex) ERC721(name, symbol) public {
       setBaseURI(baseURIp);
       STARTING_INDEX = startingIndex;
-    }
-
-    /**
-    Withdraw
-     */
-    function withdraw() public onlyOwner {
-      uint256 balance = address(this).balance;
-      payable(msg.sender).transfer(balance);
     }
 
     /**
@@ -105,12 +101,37 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
           emit TokenMinted(_tokenId, msg.sender, first_encounter);
         }
     }
+
+    /**
+    set vault address
+     */
+    function setVault(address newVaultAddress) public onlyOwner {
+       vault = newVaultAddress;
+    }
+
+    /**
+    Withdraw to vault
+     */
+    function withdraw(uint _amount) public onlyOwner {
+      require(address(vault) != address(0), 'no vault');
+      require(address(this).balance >= _amount);
+      payable(vault).transfer(_amount);
+    }
+
+    /**
+    forward Tokens
+    */
+    function forwardERC20s(IERC20 token, uint256 amount) public onlyOwner {
+      require(address(vault) != address(0), 'no vault');
+      token.transfer(vault, amount);
+    }
+
     /**
     set starting index
     */
     function setStartingIndex(uint256 startingIndex) public onlyOwner {
        STARTING_INDEX = startingIndex;
-     }
+    }
 
      /**
      Set current price

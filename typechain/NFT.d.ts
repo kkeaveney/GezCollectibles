@@ -30,6 +30,7 @@ interface NFTInterface extends ethers.utils.Interface {
     "balanceOf(address)": FunctionFragment;
     "buy(uint256)": FunctionFragment;
     "flipSaleIsActive()": FunctionFragment;
+    "forwardERC20s(address,uint256)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "getTokenDetail(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
@@ -47,6 +48,7 @@ interface NFTInterface extends ethers.utils.Interface {
     "setCurrentPrice(uint256)": FunctionFragment;
     "setMaxTokens(uint256)": FunctionFragment;
     "setStartingIndex(uint256)": FunctionFragment;
+    "setVault(address)": FunctionFragment;
     "sold(uint256)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
@@ -56,7 +58,8 @@ interface NFTInterface extends ethers.utils.Interface {
     "totalSupply()": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "withdraw()": FunctionFragment;
+    "vault()": FunctionFragment;
+    "withdraw(uint256)": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -78,6 +81,10 @@ interface NFTInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "flipSaleIsActive",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "forwardERC20s",
+    values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getApproved",
@@ -135,6 +142,7 @@ interface NFTInterface extends ethers.utils.Interface {
     functionFragment: "setStartingIndex",
     values: [BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "setVault", values: [string]): string;
   encodeFunctionData(functionFragment: "sold", values: [BigNumberish]): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
@@ -165,7 +173,11 @@ interface NFTInterface extends ethers.utils.Interface {
     functionFragment: "transferOwnership",
     values: [string]
   ): string;
-  encodeFunctionData(functionFragment: "withdraw", values?: undefined): string;
+  encodeFunctionData(functionFragment: "vault", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "withdraw",
+    values: [BigNumberish]
+  ): string;
 
   decodeFunctionResult(
     functionFragment: "CURRENT_PRICE",
@@ -182,6 +194,10 @@ interface NFTInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "buy", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "flipSaleIsActive",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "forwardERC20s",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -234,6 +250,7 @@ interface NFTInterface extends ethers.utils.Interface {
     functionFragment: "setStartingIndex",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setVault", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "sold", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "supportsInterface",
@@ -261,6 +278,7 @@ interface NFTInterface extends ethers.utils.Interface {
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "vault", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
 
   events: {
@@ -374,6 +392,18 @@ export class NFT extends Contract {
     ): Promise<ContractTransaction>;
 
     "flipSaleIsActive()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    forwardERC20s(
+      token: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "forwardERC20s(address,uint256)"(
+      token: string,
+      amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -542,6 +572,16 @@ export class NFT extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setVault(
+      newVaultAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "setVault(address)"(
+      newVaultAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     sold(arg0: BigNumberish, overrides?: CallOverrides): Promise<[boolean]>;
 
     "sold(uint256)"(
@@ -623,11 +663,17 @@ export class NFT extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    vault(overrides?: CallOverrides): Promise<[string]>;
+
+    "vault()"(overrides?: CallOverrides): Promise<[string]>;
+
     withdraw(
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    "withdraw()"(
+    "withdraw(uint256)"(
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
@@ -682,6 +728,18 @@ export class NFT extends Contract {
   ): Promise<ContractTransaction>;
 
   "flipSaleIsActive()"(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  forwardERC20s(
+    token: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "forwardERC20s(address,uint256)"(
+    token: string,
+    amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -839,6 +897,16 @@ export class NFT extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setVault(
+    newVaultAddress: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "setVault(address)"(
+    newVaultAddress: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   sold(arg0: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
 
   "sold(uint256)"(
@@ -917,11 +985,17 @@ export class NFT extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  vault(overrides?: CallOverrides): Promise<string>;
+
+  "vault()"(overrides?: CallOverrides): Promise<string>;
+
   withdraw(
+    _amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  "withdraw()"(
+  "withdraw(uint256)"(
+    _amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -968,6 +1042,18 @@ export class NFT extends Contract {
     flipSaleIsActive(overrides?: CallOverrides): Promise<void>;
 
     "flipSaleIsActive()"(overrides?: CallOverrides): Promise<void>;
+
+    forwardERC20s(
+      token: string,
+      amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "forwardERC20s(address,uint256)"(
+      token: string,
+      amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     getApproved(
       tokenId: BigNumberish,
@@ -1106,6 +1192,13 @@ export class NFT extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    setVault(newVaultAddress: string, overrides?: CallOverrides): Promise<void>;
+
+    "setVault(address)"(
+      newVaultAddress: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     sold(arg0: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
 
     "sold(uint256)"(
@@ -1184,9 +1277,16 @@ export class NFT extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    withdraw(overrides?: CallOverrides): Promise<void>;
+    vault(overrides?: CallOverrides): Promise<string>;
 
-    "withdraw()"(overrides?: CallOverrides): Promise<void>;
+    "vault()"(overrides?: CallOverrides): Promise<string>;
+
+    withdraw(_amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
+
+    "withdraw(uint256)"(
+      _amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
   };
 
   filters: {
@@ -1296,6 +1396,18 @@ export class NFT extends Contract {
     ): Promise<BigNumber>;
 
     "flipSaleIsActive()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    forwardERC20s(
+      token: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "forwardERC20s(address,uint256)"(
+      token: string,
+      amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1456,6 +1568,16 @@ export class NFT extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    setVault(
+      newVaultAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "setVault(address)"(
+      newVaultAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     sold(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     "sold(uint256)"(
@@ -1537,11 +1659,17 @@ export class NFT extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    vault(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "vault()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     withdraw(
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "withdraw()"(
+    "withdraw(uint256)"(
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
@@ -1600,6 +1728,18 @@ export class NFT extends Contract {
     ): Promise<PopulatedTransaction>;
 
     "flipSaleIsActive()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    forwardERC20s(
+      token: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "forwardERC20s(address,uint256)"(
+      token: string,
+      amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1760,6 +1900,16 @@ export class NFT extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    setVault(
+      newVaultAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "setVault(address)"(
+      newVaultAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     sold(
       arg0: BigNumberish,
       overrides?: CallOverrides
@@ -1844,11 +1994,17 @@ export class NFT extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    vault(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "vault()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     withdraw(
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    "withdraw()"(
+    "withdraw(uint256)"(
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };
