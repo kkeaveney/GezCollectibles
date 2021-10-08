@@ -5,6 +5,8 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+import "hardhat/console.sol";
+
 
 
   contract NFT is ERC721Enumerable, Ownable {
@@ -53,7 +55,7 @@ import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
     /**
     Contract constructor
     */
-    constructor(string memory name, string memory symbol, string memory baseURIp, uint256 startingIndex) ERC721(name, symbol) public {
+    constructor(string memory name, string memory symbol, string memory baseURIp, uint256 startingIndex) ERC721(name, symbol) {
       setBaseURI(baseURIp);
       STARTING_INDEX = startingIndex;
     }
@@ -65,7 +67,7 @@ import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
       uint i;
       uint tokenId;
       uint256 first_encounter = block.timestamp;
-        for(i = 1; i <=20; i++) {
+        for(i = 0; i <=19; i++) {
           tokenId = totalSupply().add(1);
           if(tokenId <= MAX_NFTS) {
             _nftDetail[tokenId] = NFTDetail(first_encounter);
@@ -91,7 +93,7 @@ import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
       require(saleIsActive, "Sale must be active for minting");
       require(numOfTokens <= MAX_PURCHASE, 'Can only mint 10 NFTs at a time');
       require(totalSupply().add(numOfTokens) <= MAX_NFTS, "At max Supply");
-      require(msg.value == CURRENT_PRICE * numOfTokens, "Ether value sent is not correct");
+      require(msg.value >= price(numOfTokens), "Ether value sent is not correct");
 
         for(uint i=1; i<=numOfTokens; i++) {
           uint256 _tokenId = totalSupply().add(1);
@@ -136,8 +138,19 @@ import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
      /**
      Set current price
     */
-    function setCurrentPrice(uint256 price) public onlyOwner {
-      CURRENT_PRICE = price;
+    function setCurrentPrice(uint256 value) public onlyOwner {
+      CURRENT_PRICE = value;
+    }
+
+    function price(uint _count) public view returns (uint256) {
+        uint _id = totalSupply().add(1);
+        // free 20
+        if(_id <= 20 ){
+            require(_count <= 1, "Max 1 Free Per Tx");
+            return 0;
+        }
+
+        return CURRENT_PRICE * _count; // 0.08 ETH
     }
 
     /**

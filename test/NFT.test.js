@@ -9,6 +9,7 @@ describe('NFT', function () {
     const maxPurchase = 10;
     const price = parseEther('0.8')
 
+
     beforeEach(async () =>{
         currentBlock = ethers.BigNumber.from(
         await ethers.provider.getBlockNumber())
@@ -20,6 +21,7 @@ describe('NFT', function () {
         token = await Token.deploy('NFToken', 'NFT');
 
         [owner, addr1, addr2, vault, vault2, _] = await ethers.getSigners();
+
         await nft.flipSaleIsActive() // Activate Sale
         await nft.setBaseURI('www.batz.com')
     })
@@ -63,24 +65,39 @@ describe('NFT', function () {
 
     })
     describe('Trade NFT', async () => {
+
+        it('restricts the first 20 NFTs to be minted per transaction', async () => {
+            await(expect(nft.mint(2, { value: price })).to.be.revertedWith("Max 1 Free Per Tx"))
+        })
         it('should transfer NFT ownership to purchaser, emit purchase event', async () => {
+            // Mint 20 free mints
+            for(let i = 1; i <= 20; i++) {
+                await nft.mint(1, {value: parseEther('0')})
+            }
             let amount = 10
             let tx = await nft.connect(addr1).mint(amount, {value: price})
+
             addr1balance = await web3.eth.getBalance(addr1.address);
             let receipt = await tx.wait()
             let event = receipt.events[0].args
             expect(event[1]).to.eq(addr1.address)
-            expect(event[2]).to.eq(1)
+            expect(event[2]).to.eq(21) // NFT minted after free 20
             // Check NFT balances
             let totalSupply = await nft.totalSupply()
             expect(await nft.balanceOf(addr1.address)).to.eq(10)
-            expect(totalSupply).to.eq(10)
+            expect(totalSupply).to.eq(30) // including free 20
             expect(await nft.balanceOf(nft.address)).to.eq(0)
             // Remaining unminted tokens
-            expect(maxNftSupply - totalSupply ).to.eq(11101)
-            expect(await nft.tokenOfOwnerByIndex(addr1.address,0)).to.eq(1)
+            expect(maxNftSupply - totalSupply ).to.eq(11081)
+            expect(await nft.tokenOfOwnerByIndex(addr1.address,0)).to.eq(21)
             expect(await nft.tokenByIndex(0)).to.eq(1)
-            let num = await nft.getTokenDetail(1)
+            // Reserve tokens
+            expect(await nft.balanceOf(owner.address)).to.eq(20)
+            await nft.reserveTokens()
+            expect(await nft.balanceOf(owner.address)).to.eq(40)
+            expect(await nft.totalSupply()).to.eq(50)
+
+
         })
     })
 
@@ -94,10 +111,14 @@ describe('NFT', function () {
         })
 
         it('it allows the owner to change vault address', async () => {
+            // Mint 20 free mints
+            for(let i = 1; i <= 20; i++) {
+                await nft.mint(1, {value: parseEther('0')})
+            }
             let amount = 10
             // Mint tokens, confirm contract balance
             await nft.connect(addr1).mint(amount, {value: price})
-            expect(await web3.eth.getBalance(nft.address)).to.eq(parseEther('.8'))
+            expect(await web3.eth.getBalance(nft.address)).to.eq(parseEther('0.8'))
             await nft.setVault(vault2.address)
             // confirm change of vault address
             expect(await nft.vault()).to.eq(vault2.address)
