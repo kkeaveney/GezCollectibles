@@ -139,7 +139,7 @@ describe('NFT', function () {
             // set vault and transfer ERC20s
             await nft.setVault(vault2.address)
             await nft.forwardERC20s(token.address, parseEther(amount))
-            // check balances
+            // check token balances
             expect(await token.balanceOf(vault2.address)).to.eq(parseEther('100'))
             expect(await token.balanceOf(nft.address)).to.eq(parseEther('0'))
         })
