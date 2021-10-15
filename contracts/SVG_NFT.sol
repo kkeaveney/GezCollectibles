@@ -6,7 +6,9 @@ import "base64-sol/base64.sol";
 
 
 contract SVGNFT is ERC721URIStorage {
-    uint256 tokenCOunter;
+    uint256 tokenCounter;
+    event CreatedSVGNFT(uint256 indexed tokenId, string tokenURI);
+
     constructor() ERC721("SVG NFT", "svgNFT") {
         tokenCounter = 0;
     }
@@ -16,6 +18,7 @@ contract SVGNFT is ERC721URIStorage {
         string memory imageURI = svgToImageURI(svg);
         string memory tokenURI = formatTokenURI(imageURI);
         _setTokenURI(tokenCounter, tokenURI);
+        emit CreatedSVGNFT(tokenCuunter, tokenURI);
         tokenCounter = tokenCOunter + 1;
     }
 
