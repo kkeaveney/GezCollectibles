@@ -31,7 +31,7 @@ module.exports = async ({
     log(`NFT created!`)
     log(`The tokenURI can be viewed here ${await svgNFT.tokenURI(0)}`)
 
-    // log(`Verify with:\n npx hardhat verify --network ${networkName} ${svgNFT.address}`)
+    log(`Verify with:\n npx hardhat verify --network ${networkName} ${svgNFT.address}`)
     // log("Let's create an NFT now!")
     // let filepath = "./img/small_enough.svg"
     // let svg = fs.readFileSync(filepath, { encoding: "utf8" })
