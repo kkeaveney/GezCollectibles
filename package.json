@@ -24,6 +24,7 @@
     "chai-bignumber": "^3.0.0",
     "dotenv": "^10.0.0",
     "ethers": "^5.0.32",
+    "hardhat-deploy": "^0.9.3",
     "hardhat-typechain": "^0.3.5",
     "identicon.js": "^2.3.3",
     "ipfs": "^0.55.4",

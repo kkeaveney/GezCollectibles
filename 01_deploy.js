@@ -7,6 +7,7 @@ const hre = require("hardhat");
 const fs = require('fs');
 var sleep = require('sleep');
 const { network } = require("hardhat");
+const { ethers } = require("hardhat");
 
 let token, nft
 
@@ -21,10 +22,10 @@ async function main() {
   const Token = await ethers.getContractFactory("Token");
   token = await Token.deploy();
 
-  const NFT = await ethers.getContractFactory("ERC20")
+  const NFT = await ethers.getContractFactory("NFT")
   nft = await NFT.deploy()
 
-  console.log("Token deployed to:", token.address);
+  //console.log("Token deployed to:", token.address);
   console.log("NFT deployed to:", nft.address);
 
   //saveFrontendFiles()
