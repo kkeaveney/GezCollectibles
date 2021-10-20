@@ -1,3 +1,5 @@
+const { network } = require("hardhat")
+
 const networkConfig = {
     default: {
         name: 'hardhat',
@@ -55,6 +57,19 @@ const networkConfig = {
     }
 }
 
+const developmentChains = ["hardhat", "localhost"]
+
+const getNetworkIdFromName = async(networkIdName) => {
+    for(const id in networkConfig) {
+        if(networkConfig[id]['name'] == networkIdName) {
+            return id
+        }
+    }
+    return null
+}
+
 module.exports = {
-    networkConfig
+    networkConfig,
+    developmentChains,
+    getNetworkIdFromName
 }
