@@ -23,20 +23,30 @@ interface RandomSVGInterface extends ethers.utils.Interface {
   functions: {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
+    "colors(uint256)": FunctionFragment;
     "create()": FunctionFragment;
     "fee()": FunctionFragment;
-    "finishMint()": FunctionFragment;
+    "finishMint(uint256)": FunctionFragment;
+    "formatTokenURI(string)": FunctionFragment;
+    "generatePath(uint256)": FunctionFragment;
+    "generatePathCommand(uint256)": FunctionFragment;
+    "generateSVG(uint256)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "keyHash()": FunctionFragment;
+    "maxNumberOfPaths()": FunctionFragment;
+    "maxNumberOfPathsCommands()": FunctionFragment;
     "name()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
+    "pathCommands(uint256)": FunctionFragment;
     "rawFulfillRandomness(bytes32,uint256)": FunctionFragment;
     "requestIdToSender(bytes32)": FunctionFragment;
     "requestIdToTokenId(bytes32)": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
+    "size()": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
+    "svgToImageURI(string)": FunctionFragment;
     "symbol()": FunctionFragment;
     "tokenIdToRandomNumber(uint256)": FunctionFragment;
     "tokenURI(uint256)": FunctionFragment;
@@ -48,11 +58,31 @@ interface RandomSVGInterface extends ethers.utils.Interface {
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "colors",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "create", values?: undefined): string;
   encodeFunctionData(functionFragment: "fee", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "finishMint",
-    values?: undefined
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "formatTokenURI",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "generatePath",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "generatePathCommand",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "generateSVG",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getApproved",
@@ -63,9 +93,21 @@ interface RandomSVGInterface extends ethers.utils.Interface {
     values: [string, string]
   ): string;
   encodeFunctionData(functionFragment: "keyHash", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "maxNumberOfPaths",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "maxNumberOfPathsCommands",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "ownerOf",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "pathCommands",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -88,9 +130,14 @@ interface RandomSVGInterface extends ethers.utils.Interface {
     functionFragment: "setApprovalForAll",
     values: [string, boolean]
   ): string;
+  encodeFunctionData(functionFragment: "size", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "svgToImageURI",
+    values: [string]
   ): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(
@@ -108,9 +155,26 @@ interface RandomSVGInterface extends ethers.utils.Interface {
 
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "colors", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "create", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "fee", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "finishMint", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "formatTokenURI",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "generatePath",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "generatePathCommand",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "generateSVG",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "getApproved",
     data: BytesLike
@@ -120,8 +184,20 @@ interface RandomSVGInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "keyHash", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "maxNumberOfPaths",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "maxNumberOfPathsCommands",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "pathCommands",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "rawFulfillRandomness",
     data: BytesLike
@@ -142,8 +218,13 @@ interface RandomSVGInterface extends ethers.utils.Interface {
     functionFragment: "setApprovalForAll",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "size", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "supportsInterface",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "svgToImageURI",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
@@ -160,6 +241,7 @@ interface RandomSVGInterface extends ethers.utils.Interface {
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
+    "CreatedRandomSVG(uint256,string)": EventFragment;
     "CreatedUnfinshedRandomSVG(uint256,uint256)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
     "requestedRandomSVG(bytes32,uint256)": EventFragment;
@@ -167,6 +249,7 @@ interface RandomSVGInterface extends ethers.utils.Interface {
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "CreatedRandomSVG"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "CreatedUnfinshedRandomSVG"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "requestedRandomSVG"): EventFragment;
@@ -235,6 +318,13 @@ export class RandomSVG extends Contract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    colors(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
+
+    "colors(uint256)"(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
     create(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -248,12 +338,54 @@ export class RandomSVG extends Contract {
     "fee()"(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     finishMint(
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    "finishMint()"(
+    "finishMint(uint256)"(
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    formatTokenURI(
+      imageURI: string,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    "formatTokenURI(string)"(
+      imageURI: string,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    generatePath(
+      _randomNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string] & { pathSvg: string }>;
+
+    "generatePath(uint256)"(
+      _randomNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string] & { pathSvg: string }>;
+
+    generatePathCommand(
+      randomNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string] & { pathCommand: string }>;
+
+    "generatePathCommand(uint256)"(
+      randomNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string] & { pathCommand: string }>;
+
+    generateSVG(
+      randomNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string] & { finalSvg: string }>;
+
+    "generateSVG(uint256)"(
+      randomNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string] & { finalSvg: string }>;
 
     getApproved(
       tokenId: BigNumberish,
@@ -281,6 +413,16 @@ export class RandomSVG extends Contract {
 
     "keyHash()"(overrides?: CallOverrides): Promise<[string]>;
 
+    maxNumberOfPaths(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    "maxNumberOfPaths()"(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    maxNumberOfPathsCommands(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    "maxNumberOfPathsCommands()"(
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     name(overrides?: CallOverrides): Promise<[string]>;
 
     "name()"(overrides?: CallOverrides): Promise<[string]>;
@@ -292,6 +434,16 @@ export class RandomSVG extends Contract {
 
     "ownerOf(uint256)"(
       tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    pathCommands(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    "pathCommands(uint256)"(
+      arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string]>;
 
@@ -354,6 +506,10 @@ export class RandomSVG extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    size(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    "size()"(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
@@ -363,6 +519,13 @@ export class RandomSVG extends Contract {
       interfaceId: BytesLike,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
+
+    svgToImageURI(svg: string, overrides?: CallOverrides): Promise<[string]>;
+
+    "svgToImageURI(string)"(
+      svg: string,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
     symbol(overrides?: CallOverrides): Promise<[string]>;
 
@@ -422,6 +585,13 @@ export class RandomSVG extends Contract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  colors(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+  "colors(uint256)"(
+    arg0: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
   create(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -435,12 +605,51 @@ export class RandomSVG extends Contract {
   "fee()"(overrides?: CallOverrides): Promise<BigNumber>;
 
   finishMint(
+    tokenId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  "finishMint()"(
+  "finishMint(uint256)"(
+    tokenId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  formatTokenURI(imageURI: string, overrides?: CallOverrides): Promise<string>;
+
+  "formatTokenURI(string)"(
+    imageURI: string,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  generatePath(
+    _randomNumber: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  "generatePath(uint256)"(
+    _randomNumber: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  generatePathCommand(
+    randomNumber: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  "generatePathCommand(uint256)"(
+    randomNumber: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  generateSVG(
+    randomNumber: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  "generateSVG(uint256)"(
+    randomNumber: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   getApproved(
     tokenId: BigNumberish,
@@ -468,6 +677,14 @@ export class RandomSVG extends Contract {
 
   "keyHash()"(overrides?: CallOverrides): Promise<string>;
 
+  maxNumberOfPaths(overrides?: CallOverrides): Promise<BigNumber>;
+
+  "maxNumberOfPaths()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+  maxNumberOfPathsCommands(overrides?: CallOverrides): Promise<BigNumber>;
+
+  "maxNumberOfPathsCommands()"(overrides?: CallOverrides): Promise<BigNumber>;
+
   name(overrides?: CallOverrides): Promise<string>;
 
   "name()"(overrides?: CallOverrides): Promise<string>;
@@ -476,6 +693,13 @@ export class RandomSVG extends Contract {
 
   "ownerOf(uint256)"(
     tokenId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  pathCommands(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+  "pathCommands(uint256)"(
+    arg0: BigNumberish,
     overrides?: CallOverrides
   ): Promise<string>;
 
@@ -538,6 +762,10 @@ export class RandomSVG extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  size(overrides?: CallOverrides): Promise<BigNumber>;
+
+  "size()"(overrides?: CallOverrides): Promise<BigNumber>;
+
   supportsInterface(
     interfaceId: BytesLike,
     overrides?: CallOverrides
@@ -547,6 +775,13 @@ export class RandomSVG extends Contract {
     interfaceId: BytesLike,
     overrides?: CallOverrides
   ): Promise<boolean>;
+
+  svgToImageURI(svg: string, overrides?: CallOverrides): Promise<string>;
+
+  "svgToImageURI(string)"(
+    svg: string,
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   symbol(overrides?: CallOverrides): Promise<string>;
 
@@ -603,6 +838,13 @@ export class RandomSVG extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    colors(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+    "colors(uint256)"(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
     create(overrides?: CallOverrides): Promise<string>;
 
     "create()"(overrides?: CallOverrides): Promise<string>;
@@ -611,9 +853,52 @@ export class RandomSVG extends Contract {
 
     "fee()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-    finishMint(overrides?: CallOverrides): Promise<void>;
+    finishMint(tokenId: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
-    "finishMint()"(overrides?: CallOverrides): Promise<void>;
+    "finishMint(uint256)"(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    formatTokenURI(
+      imageURI: string,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    "formatTokenURI(string)"(
+      imageURI: string,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    generatePath(
+      _randomNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    "generatePath(uint256)"(
+      _randomNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    generatePathCommand(
+      randomNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    "generatePathCommand(uint256)"(
+      randomNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    generateSVG(
+      randomNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    "generateSVG(uint256)"(
+      randomNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     getApproved(
       tokenId: BigNumberish,
@@ -641,6 +926,14 @@ export class RandomSVG extends Contract {
 
     "keyHash()"(overrides?: CallOverrides): Promise<string>;
 
+    maxNumberOfPaths(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "maxNumberOfPaths()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    maxNumberOfPathsCommands(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "maxNumberOfPathsCommands()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     name(overrides?: CallOverrides): Promise<string>;
 
     "name()"(overrides?: CallOverrides): Promise<string>;
@@ -649,6 +942,16 @@ export class RandomSVG extends Contract {
 
     "ownerOf(uint256)"(
       tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    pathCommands(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    "pathCommands(uint256)"(
+      arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
 
@@ -711,6 +1014,10 @@ export class RandomSVG extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    size(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "size()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
@@ -720,6 +1027,13 @@ export class RandomSVG extends Contract {
       interfaceId: BytesLike,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    svgToImageURI(svg: string, overrides?: CallOverrides): Promise<string>;
+
+    "svgToImageURI(string)"(
+      svg: string,
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     symbol(overrides?: CallOverrides): Promise<string>;
 
@@ -776,6 +1090,14 @@ export class RandomSVG extends Contract {
       { owner: string; operator: string; approved: boolean }
     >;
 
+    CreatedRandomSVG(
+      tokenId: BigNumberish | null,
+      tokenURI: null
+    ): TypedEventFilter<
+      [BigNumber, string],
+      { tokenId: BigNumber; tokenURI: string }
+    >;
+
     CreatedUnfinshedRandomSVG(
       tokenId: BigNumberish | null,
       randomNumber: null
@@ -822,6 +1144,13 @@ export class RandomSVG extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    colors(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    "colors(uint256)"(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     create(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -835,11 +1164,53 @@ export class RandomSVG extends Contract {
     "fee()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     finishMint(
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "finishMint()"(
+    "finishMint(uint256)"(
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    formatTokenURI(
+      imageURI: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "formatTokenURI(string)"(
+      imageURI: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    generatePath(
+      _randomNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "generatePath(uint256)"(
+      _randomNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    generatePathCommand(
+      randomNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "generatePathCommand(uint256)"(
+      randomNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    generateSVG(
+      randomNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "generateSVG(uint256)"(
+      randomNumber: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     getApproved(
@@ -868,6 +1239,14 @@ export class RandomSVG extends Contract {
 
     "keyHash()"(overrides?: CallOverrides): Promise<BigNumber>;
 
+    maxNumberOfPaths(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "maxNumberOfPaths()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    maxNumberOfPathsCommands(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "maxNumberOfPathsCommands()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
     "name()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -879,6 +1258,16 @@ export class RandomSVG extends Contract {
 
     "ownerOf(uint256)"(
       tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    pathCommands(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "pathCommands(uint256)"(
+      arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -941,6 +1330,10 @@ export class RandomSVG extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    size(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "size()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
@@ -948,6 +1341,13 @@ export class RandomSVG extends Contract {
 
     "supportsInterface(bytes4)"(
       interfaceId: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    svgToImageURI(svg: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    "svgToImageURI(string)"(
+      svg: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1013,6 +1413,16 @@ export class RandomSVG extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    colors(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "colors(uint256)"(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     create(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
@@ -1026,11 +1436,53 @@ export class RandomSVG extends Contract {
     "fee()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     finishMint(
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    "finishMint()"(
+    "finishMint(uint256)"(
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    formatTokenURI(
+      imageURI: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "formatTokenURI(string)"(
+      imageURI: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    generatePath(
+      _randomNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "generatePath(uint256)"(
+      _randomNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    generatePathCommand(
+      randomNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "generatePathCommand(uint256)"(
+      randomNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    generateSVG(
+      randomNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "generateSVG(uint256)"(
+      randomNumber: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     getApproved(
@@ -1059,6 +1511,20 @@ export class RandomSVG extends Contract {
 
     "keyHash()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    maxNumberOfPaths(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "maxNumberOfPaths()"(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    maxNumberOfPathsCommands(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "maxNumberOfPathsCommands()"(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "name()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -1070,6 +1536,16 @@ export class RandomSVG extends Contract {
 
     "ownerOf(uint256)"(
       tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    pathCommands(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "pathCommands(uint256)"(
+      arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1132,6 +1608,10 @@ export class RandomSVG extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    size(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "size()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
@@ -1139,6 +1619,16 @@ export class RandomSVG extends Contract {
 
     "supportsInterface(bytes4)"(
       interfaceId: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    svgToImageURI(
+      svg: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "svgToImageURI(string)"(
+      svg: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
