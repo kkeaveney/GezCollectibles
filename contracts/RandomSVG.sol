@@ -82,7 +82,7 @@ contract RandomSVG is ERC721URIStorage, VRFConsumerBase {
             string memory pathSvg = generatePath(newRNG);
             finalSvg = string(abi.encodePacked(finalSvg, pathSvg));
         }
-        finalSvg = string(abi.encodePacked(finalSvg, "</svg"));
+        finalSvg = string(abi.encodePacked(finalSvg, "</svg>"));
     }
 
     function generatePath(uint256 _randomNumber) public view returns(string memory pathSvg) {
@@ -94,7 +94,7 @@ contract RandomSVG is ERC721URIStorage, VRFConsumerBase {
             pathSvg = string(abi.encodePacked(pathSvg, pathCommand));
         }
         string memory color = colors[_randomNumber % colors.length];
-        pathSvg = string(abi.encodePacked(pathSvg, "' fill='transparent' stroke='", color, "'>"));
+        pathSvg = string(abi.encodePacked(pathSvg, "' fill='transparent' stroke='", color,"'/>"));
     }
 
     function generatePathCommand(uint256 randomNumber) public view returns(string memory pathCommand) {

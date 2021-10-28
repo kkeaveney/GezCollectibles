@@ -54,7 +54,11 @@ module.exports = async ({
     log(`You've made an NFT with token number ${tokenId.toString()}`)
     log(`Wait for the Chainlink node to respond...`)
     if(chainId != 31337) {
-
+        await new Promise(r => setTimeout(r, 180000))
+        log('Finish minting')
+        let finish_tx = await randomSVG.finishMint(tokenId, { gasLimit: 2000000 })
+        await finish_tx.wait(1)
+        log(`The tokenURI can be viewed here ${await randomSVG.tokenURI(tokenId)}`)
     } else {
         const VRFCoordinatorMock = await deployments.get("VRFCoordinatorMock")
         vrfCoordinator = await ethers.getContractAt("VRFCoordinatorMock", VRFCoordinatorMock.address, signer)
