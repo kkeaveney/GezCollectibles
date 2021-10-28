@@ -59,8 +59,8 @@ contract RandomSVG is ERC721URIStorage, VRFConsumerBase {
         _;
     }
 
-    function withdraw() public {
-        transfer(address(this).msg.sender);
+    function withdraw() public payable onlyOwner {
+        owner.transfer(address(this.balance).balance);
     }
 
     function fulfillRandomness(bytes32 requestId, uint256 randomNumber) internal override {
