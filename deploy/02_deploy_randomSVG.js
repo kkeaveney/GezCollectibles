@@ -1,4 +1,5 @@
 let { networkConfig, getNetworkIdFromName } = require('../helper-hardhat-config')
+const { parseEther } = require("ethers/lib/utils");
 
 module.exports = async ({
     getNamedAccounts,
@@ -48,13 +49,17 @@ module.exports = async ({
     // create an NFT by calling a random number
     const RandomSVGContract = await ethers.getContractFactory("RandomSVG")
     const randomSVG = new ethers.Contract(RandomSVG.address, RandomSVGContract.interface, signer)
-    let creation_tx = await randomSVG.create({ gasLimit: 300000 })
+    let creation_tx = await randomSVG.create({ gasLimit: 300000, value: parseEther('0.1') })
     let receipt = await creation_tx.wait(1)
     let tokenId = receipt.events[3].topics[2]
     log(`You've made an NFT with token number ${tokenId.toString()}`)
     log(`Wait for the Chainlink node to respond...`)
     if(chainId != 31337) {
-
+        await new Promise(r => setTimeout(r, 180000))
+        log('Finish minting')
+        let finish_tx = await randomSVG.finishMint(tokenId, { gasLimit: 2000000 })
+        await finish_tx.wait(1)
+        log(`The tokenURI can be viewed here ${await randomSVG.tokenURI(tokenId)}`)
     } else {
         const VRFCoordinatorMock = await deployments.get("VRFCoordinatorMock")
         vrfCoordinator = await ethers.getContractAt("VRFCoordinatorMock", VRFCoordinatorMock.address, signer)
