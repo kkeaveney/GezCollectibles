@@ -1,4 +1,5 @@
 let { networkConfig, getNetworkIdFromName } = require('../helper-hardhat-config')
+const { parseEther } = require("ethers/lib/utils");
 
 module.exports = async ({
     getNamedAccounts,
@@ -48,7 +49,7 @@ module.exports = async ({
     // create an NFT by calling a random number
     const RandomSVGContract = await ethers.getContractFactory("RandomSVG")
     const randomSVG = new ethers.Contract(RandomSVG.address, RandomSVGContract.interface, signer)
-    let creation_tx = await randomSVG.create({ gasLimit: 300000 })
+    let creation_tx = await randomSVG.create({ gasLimit: 300000, value: parseEther('0.1') })
     let receipt = await creation_tx.wait(1)
     let tokenId = receipt.events[3].topics[2]
     log(`You've made an NFT with token number ${tokenId.toString()}`)

@@ -10,6 +10,8 @@ contract RandomSVG is ERC721URIStorage, VRFConsumerBase {
     bytes32 public keyHash;
     uint256 public fee;
     uint256 tokenCounter;
+    uint256 public price;
+    address payable public owner;
 
     uint256 public maxNumberOfPaths;
     uint256 public maxNumberOfPathsCommands;
@@ -32,6 +34,8 @@ contract RandomSVG is ERC721URIStorage, VRFConsumerBase {
             fee = _fee;
             keyHash = _keyHash;
             tokenCounter = 0;
+            price = 100000000000000000; // 0.1 ETH,
+            owner = payable(msg.sender);
 
             maxNumberOfPaths = 10;
             maxNumberOfPathsCommands = 5;
@@ -40,13 +44,23 @@ contract RandomSVG is ERC721URIStorage, VRFConsumerBase {
             colors = ["red", "blue", "green", "yellow", "black", "white"];
     }
 
-    function create() public returns (bytes32 requestId){
+    function create() public payable returns (bytes32 requestId){
+        require(msg.value >= price, "Need to send more ETH");
         requestId = requestRandomness(keyHash, fee);
         requestIdToSender[requestId] = msg.sender;
         uint256 tokenId = tokenCounter;
         requestIdToTokenId[requestId] = tokenId;
         tokenCounter = tokenCounter + 1;
         emit requestedRandomSVG(requestId, tokenId);
+    }
+
+    modifier onlyOwner () {
+        require(msg.sender == owner, "not the owner");
+        _;
+    }
+
+    function withdraw() public {
+        transfer(address(this).msg.sender);
     }
 
     function fulfillRandomness(bytes32 requestId, uint256 randomNumber) internal override {

@@ -12,6 +12,7 @@ import {
   Contract,
   ContractTransaction,
   Overrides,
+  PayableOverrides,
   CallOverrides,
 } from "ethers";
 import { BytesLike } from "@ethersproject/bytes";
@@ -39,6 +40,7 @@ interface RandomSVGInterface extends ethers.utils.Interface {
     "name()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
     "pathCommands(uint256)": FunctionFragment;
+    "price()": FunctionFragment;
     "rawFulfillRandomness(bytes32,uint256)": FunctionFragment;
     "requestIdToSender(bytes32)": FunctionFragment;
     "requestIdToTokenId(bytes32)": FunctionFragment;
@@ -110,6 +112,7 @@ interface RandomSVGInterface extends ethers.utils.Interface {
     functionFragment: "pathCommands",
     values: [BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "price", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "rawFulfillRandomness",
     values: [BytesLike, BigNumberish]
@@ -198,6 +201,7 @@ interface RandomSVGInterface extends ethers.utils.Interface {
     functionFragment: "pathCommands",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "price", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "rawFulfillRandomness",
     data: BytesLike
@@ -326,11 +330,11 @@ export class RandomSVG extends Contract {
     ): Promise<[string]>;
 
     create(
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     "create()"(
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     fee(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -446,6 +450,10 @@ export class RandomSVG extends Contract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    price(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    "price()"(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     rawFulfillRandomness(
       requestId: BytesLike,
@@ -593,11 +601,11 @@ export class RandomSVG extends Contract {
   ): Promise<string>;
 
   create(
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   "create()"(
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   fee(overrides?: CallOverrides): Promise<BigNumber>;
@@ -702,6 +710,10 @@ export class RandomSVG extends Contract {
     arg0: BigNumberish,
     overrides?: CallOverrides
   ): Promise<string>;
+
+  price(overrides?: CallOverrides): Promise<BigNumber>;
+
+  "price()"(overrides?: CallOverrides): Promise<BigNumber>;
 
   rawFulfillRandomness(
     requestId: BytesLike,
@@ -955,6 +967,10 @@ export class RandomSVG extends Contract {
       overrides?: CallOverrides
     ): Promise<string>;
 
+    price(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "price()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     rawFulfillRandomness(
       requestId: BytesLike,
       randomness: BigNumberish,
@@ -1152,11 +1168,11 @@ export class RandomSVG extends Contract {
     ): Promise<BigNumber>;
 
     create(
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     "create()"(
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     fee(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1270,6 +1286,10 @@ export class RandomSVG extends Contract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    price(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "price()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     rawFulfillRandomness(
       requestId: BytesLike,
@@ -1424,11 +1444,11 @@ export class RandomSVG extends Contract {
     ): Promise<PopulatedTransaction>;
 
     create(
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     "create()"(
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     fee(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -1548,6 +1568,10 @@ export class RandomSVG extends Contract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    price(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "price()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     rawFulfillRandomness(
       requestId: BytesLike,
