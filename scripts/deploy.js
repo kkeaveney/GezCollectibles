@@ -28,18 +28,17 @@ async function main() {
   console.log("NFT deployed to:", nft.address);
 
   saveFrontendFiles()
-
-  //wait for 60 seconds before verify
-  await sleep.sleep(60)
-
   // verify contracts
+
   //npx hardhat clean will clear `ENOENT: no such file or directory` error
-  if(network.name != "hardhat") {
-    await hre.run("verify:verify", {
-        address: nft.address,
-        constructorArguments: [],
-    })
-  }
+  // if(network.name != "hardhat") {
+  //    //wait for 60 seconds before verify
+  //   await sleep.sleep(60)
+  //   await hre.run("verify:verify", {
+  //       address: nft.address,
+  //       constructorArguments: [],
+  //   })
+  // }
 }
 
 function saveFrontendFiles() {

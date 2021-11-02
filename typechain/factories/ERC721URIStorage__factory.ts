@@ -5,14 +5,14 @@
 import { Contract, Signer } from "ethers";
 import { Provider } from "@ethersproject/providers";
 
-import type { IERC721Enumerable } from "../IERC721Enumerable";
+import type { ERC721URIStorage } from "../ERC721URIStorage";
 
-export class IERC721Enumerable__factory {
+export class ERC721URIStorage__factory {
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): IERC721Enumerable {
-    return new Contract(address, _abi, signerOrProvider) as IERC721Enumerable;
+  ): ERC721URIStorage {
+    return new Contract(address, _abi, signerOrProvider) as ERC721URIStorage;
   }
 }
 
@@ -122,7 +122,7 @@ const _abi = [
     outputs: [
       {
         internalType: "uint256",
-        name: "balance",
+        name: "",
         type: "uint256",
       },
     ],
@@ -141,7 +141,7 @@ const _abi = [
     outputs: [
       {
         internalType: "address",
-        name: "operator",
+        name: "",
         type: "address",
       },
     ],
@@ -173,6 +173,19 @@ const _abi = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "name",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "uint256",
@@ -184,7 +197,7 @@ const _abi = [
     outputs: [
       {
         internalType: "address",
-        name: "owner",
+        name: "",
         type: "address",
       },
     ],
@@ -233,7 +246,7 @@ const _abi = [
       },
       {
         internalType: "bytes",
-        name: "data",
+        name: "_data",
         type: "bytes",
       },
     ],
@@ -251,7 +264,7 @@ const _abi = [
       },
       {
         internalType: "bool",
-        name: "_approved",
+        name: "approved",
         type: "bool",
       },
     ],
@@ -280,19 +293,13 @@ const _abi = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "index",
-        type: "uint256",
-      },
-    ],
-    name: "tokenByIndex",
+    inputs: [],
+    name: "symbol",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "string",
         name: "",
-        type: "uint256",
+        type: "string",
       },
     ],
     stateMutability: "view",
@@ -300,36 +307,18 @@ const _abi = [
   },
   {
     inputs: [
-      {
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "index",
-        type: "uint256",
-      },
-    ],
-    name: "tokenOfOwnerByIndex",
-    outputs: [
       {
         internalType: "uint256",
         name: "tokenId",
         type: "uint256",
       },
     ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "totalSupply",
+    name: "tokenURI",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "string",
         name: "",
-        type: "uint256",
+        type: "string",
       },
     ],
     stateMutability: "view",

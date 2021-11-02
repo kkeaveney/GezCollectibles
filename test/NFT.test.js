@@ -26,6 +26,8 @@ describe('NFT', function () {
             let price = '1' // 1 ether
             let id = 1;
             let tokenURI  = await nft.tokenURI(id)
+            let result = await nft.price(1)
+            console.log(tokenURI, result.toString())
 
             let tx = await nft.connect(addr1).buy(id, { value: parseEther(price)})
             expect(await nft.balanceOf(addr1.address)).to.eq(price)
