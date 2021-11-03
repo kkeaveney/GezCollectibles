@@ -27,11 +27,12 @@ contract NFT is ERC721, Ownable {
   }
 
   function mint(string memory _tokenURI, uint _price) public onlyOwner returns (bool) {
-    uint _tokenId = 1;
+    uint _tokenId = tokenCounter + 1;
     price[_tokenId] = _price;
 
     _mint(address(this), _tokenId);
     _setTokenURI(_tokenId, _tokenURI);
+    tokenCounter ++;
     return true;
   }
 
@@ -83,5 +84,10 @@ contract NFT is ERC721, Ownable {
   	sold[_id] = true; //nft is sold
   }
 
+  function totalSupply() public view returns (uint) {
+    return tokenCounter;
+  }
+
 
 }
+

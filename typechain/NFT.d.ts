@@ -41,6 +41,7 @@ interface NFTInterface extends ethers.utils.Interface {
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
     "tokenURI(uint256)": FunctionFragment;
+    "totalSupply()": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
   };
@@ -95,6 +96,10 @@ interface NFTInterface extends ethers.utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "totalSupply",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "transferFrom",
     values: [string, string, BigNumberish]
   ): string;
@@ -140,6 +145,10 @@ interface NFTInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "tokenURI", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "totalSupply",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "transferFrom",
     data: BytesLike
@@ -376,6 +385,10 @@ export class NFT extends Contract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
+    totalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    "totalSupply()"(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     transferFrom(
       from: string,
       to: string,
@@ -563,6 +576,10 @@ export class NFT extends Contract {
     overrides?: CallOverrides
   ): Promise<string>;
 
+  totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
+
+  "totalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
+
   transferFrom(
     from: string,
     to: string,
@@ -736,6 +753,10 @@ export class NFT extends Contract {
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "totalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     transferFrom(
       from: string,
@@ -978,6 +999,10 @@ export class NFT extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "totalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     transferFrom(
       from: string,
       to: string,
@@ -1180,6 +1205,10 @@ export class NFT extends Contract {
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "totalSupply()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     transferFrom(
       from: string,

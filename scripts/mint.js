@@ -58,24 +58,24 @@ async function main() {
             console.log(`https://ipfs.io/ipfs/${upload.cid.toString()}/${files[0]}`)
 
             console.log('\nMinting NFTs...')
-            for(let i=0; i<1; i++){
-            console.log('x')
-            let tx = await nft.mint(`https://ipfs.io/ipfs/${upload.cid.toString()}/${files[i]}`, web3.utils.toWei('0.001', 'Ether'), { gasLimit: '30000'})
+            for(let i=0; i<files.length; i++){
+            //console.log(i+1)
+            let tx = await nft.mint(`https://ipfs.io/ipfs/${upload.cid.toString()}/${files[i]}`, web3.utils.toWei('0.001', 'Ether'), { gasLimit: '1130000'})
             // nftsData[i] = nftsData[i].slice(0, -2) + `,\n\t"price": ${await nft.price(i+1)},\n\t"uri": "${await nft.tokenURI(i+1)}"\n}` //add price&URI to nftsData
             // console.log(`\n${i+1} NFT is minted with URI:\n${await nft.tokenURI(i+1)}`)
 
         }
 
-            // for(let i=0;i<files.length; i++) {
-            // nftsData[i] = nftsData[i].slice(0, -2) + `,\n\t"price": '1',\n\t"uri": "${await nft.tokenURI(i+1)}"\n}` //add price&URI to nftsData
-            // console.log(`\n${i+1} NFT is minted with URI:\n${await nft.tokenURI(i+1)}`)
-            // }
+            for(let i=0;i<files.length; i++) {
+            nftsData[i] = nftsData[i].slice(0, -2) + `,\n\t"price": ${await nft.price(i+1)},\n\t"uri": "${await nft.tokenURI(i+1)}"\n}` //add price&URI to nftsDat
+            console.log(`\n${i+1} NFT is minted with URI:\n${await nft.tokenURI(i+1)}`)
+            }
 
-            // console.log('\nAggregating NFTs data...')
-            // if(fs.existsSync(`src/nftsData.js`)) {
-            // await fs.unlinkSync(`src/nftsData.js`)
-        //}
-            //await fs.writeFileSync(`src/nftsData.js`, `export const nftsData = [${nftsData}]`)
+             console.log('\nAggregating NFTs data...')
+             if(fs.existsSync(`src/nftsData.js`)) {
+             await fs.unlinkSync(`src/nftsData.js`)
+        }
+             await fs.writeFileSync(`src/nftsData.js`, `export const nftsData = [${nftsData}]`)
     }
 
 main()

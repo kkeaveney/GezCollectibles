@@ -1,5 +1,5 @@
 import { nftsData } from '../nftsData.js'
-import Contract from '../artifacts/contracts/NFT.sol/NFT.json'
+import Contract from '../contracts/abis/NFT.json'
 import adr from '../contracts/contract-address.json'
 import Web3 from 'web3'
 import {
@@ -65,6 +65,7 @@ export const loadBalance = async (dispatch, web3, account) => {
 export const loadContract = async (dispatch, web3, netId) => {
   try {
     const contract = new web3.eth.Contract(Contract.abi, adr.NFT)
+    console.log('address', adr.NFT)
     dispatch(contractLoaded(contract))
     return contract
   } catch (e) {
@@ -99,6 +100,7 @@ export const update = async (dispatch) => {
 export const loadNftData = async (dispatch, contract) => {
   try{
     const totalSupply = await contract.methods.totalSupply().call()
+    console.log('totalSupply', totalSupply)
     const uri = await contract.methods.tokenURI(1).call()
     fetch(uri)
       .then(res => res.json())
