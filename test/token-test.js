@@ -8,6 +8,8 @@ describe("Token", function() {
     Token = await ethers.getContractFactory('Token');
     token = await Token.deploy('MADDOGZ', 'MDZ');
     [owner, addr1, addr2, _] = await ethers.getSigners();
+
+
   })
 
   describe('Deployment', () => {
@@ -31,7 +33,8 @@ describe("Token", function() {
     it("Should fail if not enough tokens", async () => {
       const initialOwnerBalance = await token.balanceOf(owner.address)
       await expect(token.connect(addr1).transfer(owner.address, 1))
-        .to.be.revertedWith("transfer amount exceeds balance")
+        .to.be.revertedWith("revert ERC20: transfer amount exceeds balance")
+
 
       expect(
         await token.balanceOf(owner.address)
@@ -44,10 +47,15 @@ describe("Token", function() {
     await token.transfer(addr1.address, 100);
     await token.transfer(addr2.address, 50);
 
+
+    const finalOwnerBalance = await token.balanceOf(owner.address);
+    
     const addr1Balance = await token.balanceOf(addr1.address);
     expect(addr1Balance).to.equal(100);
 
     const addr2Balance = await token.balanceOf(addr2.address);
     expect(addr2Balance).to.equal(50);
   });
+
 })
+

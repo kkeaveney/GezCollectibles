@@ -28,6 +28,11 @@ module.exports = {
         accounts: [process.env.PRIVATE_KEYS],
         saveDeployments: true,
     },
+    poloygon: {
+      url: "https://rpc-mainnet.maticvigil.com/",
+      accounts: [process.env.PRIVATE_KEYS],
+      saveDeployments: true,
+    }
   },
   solidity: {
     compilers: [
