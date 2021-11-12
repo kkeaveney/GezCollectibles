@@ -1,4 +1,4 @@
-// We require the Hardhat Runtime Environment explicitly here. This is optional 
+// We require the Hardhat Runtime Environment explicitly here. This is optional
 // but useful for running the script in a standalone fashion through `node <script>`.
 //
 // When running the script with `hardhat run <script>` you'll find the Hardhat
@@ -64,9 +64,6 @@ function saveFrontendFiles() {
   fs.writeFileSync(contractsDir + "/abis/NFT.json",JSON.stringify(NFTArt, null, 2));
 }
 
-
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
 main()
   .then(() => process.exit(0))
   .catch(error => {
