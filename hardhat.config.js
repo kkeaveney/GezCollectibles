@@ -13,7 +13,7 @@ require("./tasks/mint")
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
-  defaultNetwork: "hardhat",
+  defaultNetwork: "rinkeby",
   // paths: {
   //   artifacts: './src/artifacts',
   // },
