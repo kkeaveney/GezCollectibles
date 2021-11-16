@@ -8,7 +8,7 @@ const fs = require('fs');
 var sleep = require('sleep');
 const { network } = require("hardhat");
 
-let token, nft
+let nft
 
 async function main() {
   const [deployer] = await hre.ethers.getSigners();
@@ -17,9 +17,6 @@ async function main() {
     "Deploying contracts with the account:",
     deployer.address
   );
-
-  // const Token = await ethers.getContractFactory("Token");
-  // token = await Token.deploy();
 
   const NFT = await ethers.getContractFactory("NFT")
   nft = await NFT.deploy('GENZ', 'GNZ', 'www.xyz.com', 0)
@@ -62,7 +59,6 @@ function saveFrontendFiles() {
   // const TokenArt = artifacts.readArtifactSync("Token");
   const NFTArt = artifacts.readArtifactSync("NFT");
 
-  // fs.writeFileSync(contractsDir + "/abis/Token.json",JSON.stringify(TokenArt, null, 2));
   fs.writeFileSync(contractsDir + "/abis/NFT.json",JSON.stringify(NFTArt, null, 2));
 }
 
