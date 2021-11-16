@@ -34,7 +34,7 @@ interface NFTInterface extends ethers.utils.Interface {
     "getGoldNFT()": FunctionFragment;
     "getTokenDetail(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
-    "mint(string,uint256,uint256)": FunctionFragment;
+    "mint(string,uint256)": FunctionFragment;
     "mintToken(uint256)": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
@@ -100,7 +100,7 @@ interface NFTInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "mint",
-    values: [string, BigNumberish, BigNumberish]
+    values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "mintToken",
@@ -443,17 +443,15 @@ export class NFT extends Contract {
     ): Promise<[boolean]>;
 
     mint(
-      tokenURI: string,
-      numOfTokens: BigNumberish,
+      _tokenURI: string,
       _price: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    "mint(string,uint256,uint256)"(
-      tokenURI: string,
-      numOfTokens: BigNumberish,
+    "mint(string,uint256)"(
+      _tokenURI: string,
       _price: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     mintToken(
@@ -766,17 +764,15 @@ export class NFT extends Contract {
   ): Promise<boolean>;
 
   mint(
-    tokenURI: string,
-    numOfTokens: BigNumberish,
+    _tokenURI: string,
     _price: BigNumberish,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  "mint(string,uint256,uint256)"(
-    tokenURI: string,
-    numOfTokens: BigNumberish,
+  "mint(string,uint256)"(
+    _tokenURI: string,
     _price: BigNumberish,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   mintToken(
@@ -1073,18 +1069,16 @@ export class NFT extends Contract {
     ): Promise<boolean>;
 
     mint(
-      tokenURI: string,
-      numOfTokens: BigNumberish,
+      _tokenURI: string,
       _price: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<boolean>;
 
-    "mint(string,uint256,uint256)"(
-      tokenURI: string,
-      numOfTokens: BigNumberish,
+    "mint(string,uint256)"(
+      _tokenURI: string,
       _price: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<boolean>;
 
     mintToken(tokenId: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
@@ -1425,17 +1419,15 @@ export class NFT extends Contract {
     ): Promise<BigNumber>;
 
     mint(
-      tokenURI: string,
-      numOfTokens: BigNumberish,
+      _tokenURI: string,
       _price: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "mint(string,uint256,uint256)"(
-      tokenURI: string,
-      numOfTokens: BigNumberish,
+    "mint(string,uint256)"(
+      _tokenURI: string,
       _price: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     mintToken(
@@ -1752,17 +1744,15 @@ export class NFT extends Contract {
     ): Promise<PopulatedTransaction>;
 
     mint(
-      tokenURI: string,
-      numOfTokens: BigNumberish,
+      _tokenURI: string,
       _price: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    "mint(string,uint256,uint256)"(
-      tokenURI: string,
-      numOfTokens: BigNumberish,
+    "mint(string,uint256)"(
+      _tokenURI: string,
       _price: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     mintToken(

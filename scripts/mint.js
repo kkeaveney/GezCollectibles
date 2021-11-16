@@ -60,7 +60,7 @@ async function main() {
             console.log('\nMinting NFTs...')
             for(let i=0; i<files.length; i++){
             console.log(i)
-            //let tx = await nft.mint(`https://ipfs.io/ipfs/${upload.cid.toString()}/${files[i]}`, 20, web3.utils.toWei('0.001', 'Ether'), { gasLimit: '1130000'})
+            let tx = await nft.mint(`https://ipfs.io/ipfs/${upload.cid.toString()}/${files[i]}`, web3.utils.toWei('0.001', 'Ether'), { gasLimit: '1130000'})
         }
 
             for(let i=0;i<files.length; i++) {
@@ -68,11 +68,11 @@ async function main() {
             console.log(`\n${i+1} NFT is minted with URI:\n${await nft.tokenURI(i+1)}`)
             }
 
-        //      console.log('\nAggregating NFTs data...')
-        //      if(fs.existsSync(`src/nftsData.js`)) {
-        //      await fs.unlinkSync(`src/nftsData.js`)
-        // }
-        //      await fs.writeFileSync(`src/nftsData.js`, `export const nftsData = [${nftsData}]`)
+             console.log('\nAggregating NFTs data...')
+             if(fs.existsSync(`src/nftsData.js`)) {
+             await fs.unlinkSync(`src/nftsData.js`)
+        }
+             await fs.writeFileSync(`src/nftsData.js`, `export const nftsData = [${nftsData}]`)
     }
 
 main()

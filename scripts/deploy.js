@@ -19,7 +19,7 @@ async function main() {
   );
 
   const NFT = await ethers.getContractFactory("NFT")
-  nft = await NFT.deploy('GENZ', 'GNZ', 'www.xyz.com', 0)
+  nft = await NFT.deploy('GENZ', 'GNZ', '', 0)
 
   console.log("NFT deployed to:", nft.address);
 

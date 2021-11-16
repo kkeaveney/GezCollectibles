@@ -56,7 +56,7 @@ import "hardhat/console.sol";
 
     // Base URI
     string private _baseURIextended;
-
+    uint256 tokenCounter = 0;
 
     /**
     Contract constructor
@@ -103,32 +103,32 @@ import "hardhat/console.sol";
     /**
     Mint tokens
      */
-    function mint(string memory tokenURI, uint256 numOfTokens, uint256 _price) public payable {
-      require(saleIsActive, "Sale must be active for minting");
-      require(numOfTokens <= MAX_PURCHASE, 'Can only mint 10 NFTs at a time');
-      require(totalSupply().add(numOfTokens) <= MAX_NFTS, "At max Supply");
-      require(msg.value == CURRENT_PRICE * numOfTokens, "Ether value sent is not correct");
+    // function mint(string memory _tokenURI, uint256 _numOfTokens, uint256 _price) public payable {
+    //   require(saleIsActive, "Sale must be active for minting");
+    //   require(_numOfTokens <= MAX_PURCHASE, 'Can only mint 10 NFTs at a time');
+    //   require(totalSupply().add(_numOfTokens) <= MAX_NFTS, "At max Supply");
+    //   require(msg.value == CURRENT_PRICE * _numOfTokens, "Ether value sent is not correct");
 
-        for(uint i=1; i<=numOfTokens; i++) {
-          uint256 _tokenId = totalSupply().add(1);
-          _safeMint(msg.sender, _tokenId);
-          price[_tokenId] = _price;
-          //_setTokenURI(_tokenId, _tokenURI);
-          uint256 first_encounter = block.timestamp;
-          _nftDetail[_tokenId] = NFTDetail(first_encounter);
-          emit TokenMinted(_tokenId, msg.sender, first_encounter);
-        }
+    //     for(uint i=1; i<=_numOfTokens; i++) {
+    //       uint256 _tokenId = totalSupply().add(1);
+    //       _safeMint(msg.sender, _tokenId);
+    //       price[_tokenId] = _price;
+    //       _setTokenURI(_tokenId, _tokenURI);
+    //       uint256 first_encounter = block.timestamp;
+    //       _nftDetail[_tokenId] = NFTDetail(first_encounter);
+    //       emit TokenMinted(_tokenId, msg.sender, first_encounter);
+    //     }
+    // }
+
+    function mint(string memory _tokenURI, uint _price) public onlyOwner returns (bool) {
+      uint _tokenId = tokenCounter + 1;
+      price[_tokenId] = _price;
+
+      _mint(address(this), _tokenId);
+      _setTokenURI(_tokenId, _tokenURI);
+      tokenCounter ++;
+      return true;
     }
-
-  //   function mint(string memory _tokenURI, uint _price) public onlyOwner returns (bool) {
-  //   uint _tokenId = tokenCounter + 1;
-  //   price[_tokenId] = _price;
-
-  //   _mint(address(this), _tokenId);
-  //   _setTokenURI(_tokenId, _tokenURI);
-  //   tokenCounter ++;
-  //   return true;
-  // }
 
     /**
     select Gold NFT
