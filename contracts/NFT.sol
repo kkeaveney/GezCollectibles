@@ -9,6 +9,7 @@ import "hardhat/console.sol";
   contract NFT is ERC721Enumerable, Ownable {
 
     using SafeMath for uint256;
+    using Strings for uint256;
 
     struct NFTDetail {
       uint256 first_encounter;
@@ -48,6 +49,14 @@ import "hardhat/console.sol";
 
     mapping (uint => bool) public sold;
 
+    // optional mapping for token URIs
+    mapping (uint => string) private _tokenURIs;
+
+    mapping (uint => uint) public price;
+
+    // Base URI
+    string private _baseURIextended;
+    uint256 tokenCounter = 0;
 
     /**
     Contract constructor
@@ -94,19 +103,31 @@ import "hardhat/console.sol";
     /**
     Mint tokens
      */
-    function mint(uint256 numOfTokens) public payable {
-      require(saleIsActive, "Sale must be active for minting");
-      require(numOfTokens <= MAX_PURCHASE, 'Can only mint 10 NFTs at a time');
-      require(totalSupply().add(numOfTokens) <= MAX_NFTS, "At max Supply");
-      require(msg.value == CURRENT_PRICE * numOfTokens, "Ether value sent is not correct");
+    // function mint(string memory _tokenURI, uint256 _numOfTokens, uint256 _price) public payable {
+    //   require(saleIsActive, "Sale must be active for minting");
+    //   require(_numOfTokens <= MAX_PURCHASE, 'Can only mint 10 NFTs at a time');
+    //   require(totalSupply().add(_numOfTokens) <= MAX_NFTS, "At max Supply");
+    //   require(msg.value == CURRENT_PRICE * _numOfTokens, "Ether value sent is not correct");
 
-        for(uint i=1; i<=numOfTokens; i++) {
-          uint256 _tokenId = totalSupply().add(1);
-          _safeMint(msg.sender, _tokenId);
-          uint256 first_encounter = block.timestamp;
-          _nftDetail[_tokenId] = NFTDetail(first_encounter);
-          emit TokenMinted(_tokenId, msg.sender, first_encounter);
-        }
+    //     for(uint i=1; i<=_numOfTokens; i++) {
+    //       uint256 _tokenId = totalSupply().add(1);
+    //       _safeMint(msg.sender, _tokenId);
+    //       price[_tokenId] = _price;
+    //       _setTokenURI(_tokenId, _tokenURI);
+    //       uint256 first_encounter = block.timestamp;
+    //       _nftDetail[_tokenId] = NFTDetail(first_encounter);
+    //       emit TokenMinted(_tokenId, msg.sender, first_encounter);
+    //     }
+    // }
+
+    function mint(string memory _tokenURI, uint _price) public onlyOwner returns (bool) {
+      uint _tokenId = tokenCounter + 1;
+      price[_tokenId] = _price;
+
+      _mint(address(this), _tokenId);
+      _setTokenURI(_tokenId, _tokenURI);
+      tokenCounter ++;
+      return true;
     }
 
     /**
@@ -198,6 +219,29 @@ import "hardhat/console.sol";
       _transfer(address(this), msg.sender, id); //nft to user
       _owner.transfer(msg.value); //eth to owner
       sold[id] = true; //nft is sold
+    }
+
+    function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
+    require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
+      string memory _tokenURI = _tokenURIs[tokenId];
+      string memory base = _baseURI();
+
+      // If there is no base URI, return the token URI.
+      if (bytes(base).length == 0) {
+                return _tokenURI;
+      }
+      // If both are set, concatenate the baseURI and tokenURI (via abi.encodePacked).
+      if (bytes(_tokenURI).length > 0) {
+          return string(abi.encodePacked(base, _tokenURI));
+      }
+      // If there is a baseURI but no tokenURI, concatenate the tokenID to the baseURI.
+      return string(abi.encodePacked(base, tokenId.toString()));
+  }
+
+
+    function _setTokenURI(uint256 tokenId, string memory _tokenURI) internal virtual {
+      require(_exists(tokenId), "ERC721Metadata: URI set of nonexistent token");
+      _tokenURIs[tokenId] = _tokenURI;
     }
 
 }

@@ -8,7 +8,7 @@ const fs = require('fs');
 var sleep = require('sleep');
 const { network } = require("hardhat");
 
-let token, nft
+let nft
 
 async function main() {
   const [deployer] = await hre.ethers.getSigners();
@@ -18,13 +18,9 @@ async function main() {
     deployer.address
   );
 
-  const Token = await ethers.getContractFactory("Token");
-  token = await Token.deploy();
-
   const NFT = await ethers.getContractFactory("NFT")
-  nft = await NFT.deploy()
+  nft = await NFT.deploy('GENZ', 'GNZ', '', 0)
 
-  console.log("Token deployed to:", token.address);
   console.log("NFT deployed to:", nft.address);
 
   saveFrontendFiles()
@@ -37,7 +33,9 @@ async function main() {
   if(network.name != "hardhat") {
     await hre.run("verify:verify", {
         address: nft.address,
-        constructorArguments: [],
+        constructorArguments: [
+          'GENZ', 'GNZ', 'www.xyz.com', 0
+        ],
     })
   }
 }
@@ -53,15 +51,14 @@ function saveFrontendFiles() {
   fs.writeFileSync(
     contractsDir + "/contract-address.json",
     JSON.stringify({
-      Token: token.address,
+      // Token: token.address,
       NFT: nft.address
       }, undefined, 2)
   );
 
-  const TokenArt = artifacts.readArtifactSync("Token");
+  // const TokenArt = artifacts.readArtifactSync("Token");
   const NFTArt = artifacts.readArtifactSync("NFT");
 
-  fs.writeFileSync(contractsDir + "/abis/Token.json",JSON.stringify(TokenArt, null, 2));
   fs.writeFileSync(contractsDir + "/abis/NFT.json",JSON.stringify(NFTArt, null, 2));
 }
 
