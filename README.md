@@ -21,16 +21,25 @@ npm install
 npx hardhat node
 ```
 
-4. Deploy the contract
+5. Start ipfs server
+
+```sh
+
+Note you may want to restart => jsipfs daemon
+
+```
+
+6. Deploy and mint the contract
 
 ```sh
 npx hardhat run scripts/deploy.js --network rinkeby
 npx hardhat run scripts/mint.js --network rinkeby
 
+Sampple contract deployed on Rinkeby- 0x1c72c5C32DA6ac4E046F35D769219740a6744004
+
 ```
 
-
-6. Run the app
+7. Run the app
 
 ```sh
 npm start

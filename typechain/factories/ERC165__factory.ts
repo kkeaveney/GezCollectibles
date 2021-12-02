@@ -15,6 +15,11 @@ export class ERC165__factory {
 
 const _abi = [
   {
+    inputs: [],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
     inputs: [
       {
         internalType: "bytes4",
