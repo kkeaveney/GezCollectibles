@@ -24,7 +24,7 @@ async function main() {
   const NFT = await ethers.getContractFactory("NFT")
   nft = await NFT.deploy()
 
-  console.log("Token deployed to:", token.address);
+  // console.log("Token deployed to:", token.address);
   console.log("NFT deployed to:", nft.address);
 
   saveFrontendFiles()

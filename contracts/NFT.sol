@@ -22,7 +22,7 @@ contract NFT is ERC721, Ownable {
 
   event Purchase(address owner, uint price, uint id, string uri);
 
-  constructor() ERC721("GENZ", "GNZ") {
+  constructor() ERC721("GENZ", "GNZ") public {
   	_owner = payable(msg.sender);
   }
 
@@ -36,16 +36,16 @@ contract NFT is ERC721, Ownable {
     return true;
   }
 
-  function setBaseURI(string memory _baseURI) external onlyOwner() {
+  function setBaseURI(string calldata _baseURI) external onlyOwner() {
     _baseURIextended = _baseURI;
   }
 
-  function _setTokenURI(uint256 tokenId, string memory _tokenURI) internal virtual {
+  function _setTokenURI(uint256 tokenId, string memory _tokenURI) internal virtual override {
     require(_exists(tokenId), "ERC721Metadata: URI set of nonexistent token");
     _tokenURIs[tokenId] = _tokenURI;
   }
 
-  function _baseURI() internal view override returns (string memory) {
+  function _baseURI() internal view returns (string memory) {
     return _baseURIextended;
   }
 
@@ -84,7 +84,7 @@ contract NFT is ERC721, Ownable {
   	sold[_id] = true; //nft is sold
   }
 
-  function totalSupply() public view returns (uint) {
+  function totalSupply() public view override returns (uint) {
     return tokenCounter;
   }
 
