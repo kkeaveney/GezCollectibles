@@ -35,7 +35,9 @@ Note you may want to restart => jsipfs daemon
 npx hardhat run scripts/deploy.js --network rinkeby
 npx hardhat run scripts/mint.js --network rinkeby
 
-Sampple contract deployed on Rinkeby- 0x1c72c5C32DA6ac4E046F35D769219740a6744004
+Sample contract deployed on Rinkeby- 0x1c72c5C32DA6ac4E046F35D769219740a6744004
+
+http://genz.surge.sh/
 
 ```
 

@@ -5,17 +5,17 @@ import { connect } from 'react-redux'
 class Loading extends Component {
   render() {
     return(
-      <div className="loading text-center centered" style={{ color: "#55FF55" }}>
+      <div className="loading text-center centered" style={{ color: "#ffffff" }}>
 	      <br></br>
 	      <br></br>
 	      <br></br>
         <ReactTypingEffect
           text={[
-            "Loading ........................"
+            "please connec to rinkeby network"
           ]}
-          speed='750'
+          speed='100'
           eraseSpeed='100'
-          eraseDelay='10000'
+          eraseDelay='1000000000'
           cursorRenderer={cursor => <h1>{cursor}</h1>}
           displayTextRenderer={(text, i) => {
             return (
