@@ -44,5 +44,5 @@ http://genz.surge.sh/
 7. Run the app
 
 ```sh
-npm start
+npm run start
 ```
